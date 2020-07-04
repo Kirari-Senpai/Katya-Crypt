@@ -29,7 +29,7 @@ El funcionamiento de dicho algoritmo se puede explicar de una manera sencilla:
    sk2: subclave 2
    
    ```
-   Bien. ¿Pero que quiere decir esta regla? 
+   Bien. ¿Pero que quiere decir esta regla? s
    
    Bueno, básicamente:
    
