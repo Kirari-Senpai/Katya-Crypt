@@ -4,6 +4,10 @@ import string
 import random
 import collections
 
+from math import gcd as coprime
+from sympy.core.numbers import igcdex as inverse
+
+
 class ABCException(Exception):
 	pass
 
@@ -19,12 +23,17 @@ class ShiftException(Exception):
 class ShiftInvalid(ShiftException):
 	pass
 
+class SubkeysError(Exception):
+	pass
+
 class CipherException(Exception):
 	pass
 
 
+SPECIAL_NUMBER = 96	
 
-# Algoritmo de __: f(L,Kn,Ki,n) = [[(L+Kn+Ki) mod 96]^(Kn)] mod n;
+
+# Algoritmo de Katya: 
 
 class Cipher:
 
@@ -32,27 +41,86 @@ class Cipher:
 
 		self.ABC = None
 		self.seed_ = 0
+		self.subkey1,self.subkey2 = (1,1)
 
-	def key_complete(self,string,key):
+
+	# FUNCIONES OCULTAS
+
+	def __clear_string(self,string):
+
+		""" 
+
+		Devuelve una tupla de los cocientes de cada letra del mensaje cifrado 
+		y la cadena cifrada modificada.
+		
+		Parametros -> string: cadena cifrada (ejemplo) ¿bbf¡+¿bbf¡q¿bcb¡;¿bde¡V¿bde¡a¿bdf¡l¿bde¡R¿bcb¡+¿bbf¡L¿bbf¡q
+
+		Salida: ([115,115,121,134,134,135,134,121,115,115],"+q;ValR+Lq;") 
+
+		"""
+
+		quotients = []
+		new_string = ""
+
+		blocks = [tuple(i.split('¡')) for i in string.split("¿") if len(i)!=0]
+
+		for block in blocks:
+				
+			quotient = ""
+
+			for chunk in block[0]:
+
+				quotient += str(self.ABC.index(chunk))
+
+			quotients.append(int(quotient))	
+			new_string += block[1]
+
+		return (quotients,new_string)
+
+
+	def __key_complete(self,raw_string,key):
+
+		"""
+
+		Devuelve la key con la longitud de la cadena a cifrar.
+
+		Parametros -> raw_string: cadena no cifrada (ejemplo) Hola Mundo
+		              key: llave para cifrar (ejemplo) key
+
+		Salida: keykeykeyk
+
+		"""
 
 		new_key = ""
 
-		if (len(key)<=len(string)):
+		if (len(key)<=len(raw_string)):
 
-			while (len(new_key)<len(string)):
+			while (len(new_key)<len(raw_string)):
 				new_key += key
 			
-			if (len(new_key)>len(string)):
-				new_key = new_key[:len(string)]
+			if (len(new_key)>len(raw_string)):
+				new_key = new_key[:len(raw_string)]
 
 		else:
 
-			new_key = key[:len(string)]
-
+			new_key = key[:len(raw_string)]
 
 		return new_key
 
-	def shifts(self,generic_list,num):
+
+
+	def __shifts(self,generic_list,num):
+
+		"""
+
+		Devuelve una lista con los trozos de mensaje alterados.
+
+		Parametros -> generic_list: lista a trozos de mensaje (ejemplo) ["Hola","Mundo!","Es","la","hora."]
+		              num: desplazamientos de los elementos de la lista (ejemplo) 3
+
+		Salida: ["Es","la","hora.","Hola","Mundo!"]
+
+		"""
 
 		generic = collections.deque(generic_list)
 		generic.rotate(num)
@@ -61,11 +129,71 @@ class Cipher:
 
 		return generic_list
 
-	''' Funciones para lenguaje '''
+
+
+	# FUNCIONES PARA MANIPULACION DE SUBCLAVES
+
+	def subkeys(self,a=1,b=1):
+
+		"""
+
+		Devuelve una tupla con las dos subclaves para cifrar el mensaje. Tales
+		son un numero coprimo y el otro un desplazamiento.
+
+		Parametros -> a: numero coprimo (ejemplo) 1
+		              b: numero de desplazamiento (ejemplo) 1
+
+		Salida: (1,1)
+
+		"""
+
+		if (isinstance(a,int) and isinstance(b,int)) and ((a>0 and a<=SPECIAL_NUMBER) and (b>0 and b<=SPECIAL_NUMBER)) and (coprime(a,SPECIAL_NUMBER)==1):
+			self.subkey1,self.subkey2 = (a,b)
+
+		else:
+			raise SubkeysError('Failed to set subkeys')
+
+		return (self.subkey1,self.subkey2)
+
+
+	def show_possible_subkeys(self):
+
+		"""
+
+		Devuelve las posibles subclaves (numeros coprimos) que se podran utilizar.
+
+		"""
+
+		subkeys_ = []
+
+		a,b = (1,SPECIAL_NUMBER)
+
+		for i in range(a,b+1):
+			if (coprime(i,b)==1):
+				subkeys_.append(i)
+
+		return subkeys_
+
+
+	# FUNCIONES PARA EL LENGUAJE
 
 	def set_ABC(self,abc=0):
 
-		if (isinstance(abc,list)) and (len(abc)==96) and (abc!=0):
+		"""
+
+		Devuleve el abecedario que se utilizara para cifrar el mensaje.
+
+		Parametros -> abc: establecer abecedario (por defecto 0)
+
+		Se puede establecer un abecedario personalizado, solo debe cumplir las
+		siguientes reestricciones:
+
+		- abc tiene que ser una lista
+		- abc debe ser de longitud 96
+
+		"""
+
+		if (isinstance(abc,list)) and (len(abc)==SPECIAL_NUMBER) and (abc!=0):
 
 			self.ABC = abc
 
@@ -76,7 +204,6 @@ class Cipher:
 			            "0","1","2","3","4","5","6","7","8","9","!","\"","#","$","%","&","'","(",")","*","+","´","-",".","/",
 			            ":",";","<","=",">","@","[","\\","]","^","_","`","{","|","}","~","?"]
 
-			#random.shuffle(self.ABC)
 
 		else:
 			
@@ -87,11 +214,25 @@ class Cipher:
 
 	def random_ABC(self):
 
+		"""
+
+		Devuelve un entero que indica el orden en el que se encuentra el ABC, luego
+		de haber sido alterado aleatoriamente.
+
+		Se utiliza un numero aleatorio y a traves del metodo __shifts() se realiza 
+		el desplazamiento con tal numero. Hay que considerar que si pierde el numero
+		de orden o semilla entonces no podra recuperar la informacion al momento de
+		querer descifrarla.
+
+		"""
+
 		if (self.ABC!=None):
 
-			num = random.randint(0,95)
+			self.set_ABC(0)
 
-			self.ABC = self.shifts(self.ABC,num)
+			num = random.randint(0,SPECIAL_NUMBER-1)
+
+			self.ABC = self.__shifts(self.ABC,num)
 
 			self.seed_ = num
 
@@ -101,34 +242,62 @@ class Cipher:
 
 		return self.seed_
 
+
 	def set_seed(self,integer=0):
 
-		if (isinstance(integer,int)) and (integer<=95 and integer>0):
+		"""
 
-		 	self.ABC = self.shifts(self.ABC,integer)
+		Devuelve un entero que indica el orden en el que se encuentra el ABC, luego
+		de haber sido alterado manualmente.
 
-		 	self.seed_ = integer
+		Parametros -> integer: entero que sera el desplazamiento para alterar el orden del ABC.
+		                       Por defecto se encuentra en 0.
 
-		elif (isinstance(integer,int)) and (integer>95 or integer<0):
+		Al igual que el metodo random_ABC(), hay que considerar que si pierde el numero
+		de orden o semilla entonces no podra recuperar la informacion al momento de
+		querer descifrarla.
+
+		"""
+
+		if (isinstance(integer,int)) and (integer<=SPECIAL_NUMBER-1 and integer>0):
+
+			self.set_ABC(0)
+
+			self.ABC = self.__shifts(self.ABC,integer)
+
+			self.seed_ = integer
+
+		elif (isinstance(integer,int)) and (integer>SPECIAL_NUMBER-1 or integer<0):
 
 			raise ShiftInvalid("Seed is not in the range (0-95)")
 
 		return self.seed_
 
 
-	''' Funcion para orden de mensaje '''
+	# FUNCIONES PARA MODIFICAR MENSAJE
 
-	def build_matrix(self,string,long_key):
+	def __build_matrix(self,raw_string,long_key):
 
-		matrix = [string[i:i+long_key] for i in range(0,len(string),long_key)]
+		"""
+
+		Devuelve una lista con trozos de mensaje con longitud contraseña.
+
+		Parametros -> raw_string: (ejemplo) Hola Mundo
+		              long_key: entero (ejemplo) 3
+
+		Salida: ["Hol","a M","und","o"]
+
+		"""
+
+		matrix = [raw_string[i:i+long_key] for i in range(0,len(raw_string),long_key)]
 
 		return matrix
 
-	def modify_msg(self,string,key,shift):
+	def __modify_msg(self,string,key,shift):
 
 		if (shift!=0) and (shift<=len(key) and shift>0):
-			matrix = self.build_matrix(string,len(key))
-			return ''.join(self.shifts(matrix,shift))
+			matrix = self.__build_matrix(string,len(key))
+			return ''.join(self.__shifts(matrix,shift))
 
 		elif (shift!=0) and (shift>len(key) or shift<0):
 			raise ShiftException("Displacement does not meet desired length")
@@ -136,24 +305,30 @@ class Cipher:
 		else:
 			return 0
 
-	''' Funciones de cifrado y descifrado '''
 
-	def encrypt(self,string,key,string_shift=0,mod=96):
+	# FUNCIONES PARA CIFRADO Y DESCIFRADO
 
-		#self.ABC = self.set_ABC()
+	def encrypt(self,string,key,string_shift=0):
 		
 		if (string_shift!=0):
-			string = self.modify_msg(string,key,string_shift)
+			string = self.__modify_msg(string,key,string_shift)
 
-		key = self.key_complete(string,key)
+		key = self.__key_complete(string,key)
+		sk1,sk2 = self.subkey1,self.subkey2
 
 		text = [] 
 
 		if (self.ABC!=None):
 
 			for i in range(len(string)):
-				index = (((ord(string[i])+ord(key[i])+ord(key[::-1][i]))%96)^(ord(key[i])))%mod
-				text.append(self.ABC[index])
+
+				calc = ( (ord(string[i]) + ord(key[i]) + ord(key[::-1][i])) ^ (ord(key[i])*ord(key[::-1][i])) )
+
+				root = ''.join([self.ABC[int(i)] for i in str(calc//SPECIAL_NUMBER)])
+
+				index = ( (calc%SPECIAL_NUMBER) * sk1 + sk2 ) % SPECIAL_NUMBER 
+
+				text.append("¿"+root+"¡"+self.ABC[index])
 
 		else:
 
@@ -162,18 +337,37 @@ class Cipher:
 		return ''.join(text)
 
 
-	def decrypt(self,string,key,mod=96,order=0):
+	def decrypt(self,string,key,order=0,subkey1=1,subkey2=1):
 
-		self.ABC = set_ABC(order)
+		self.ABC = self.set_ABC(order)
 
-		return
+		quotients,string = self.__clear_string(string)
 
+		key = self.__key_complete(string,key)
+
+		decrypt = [] 
+
+		if (self.ABC!=None):
+
+			for i in range(len(string)):
+
+				letter = self.ABC.index(string[i])
+
+				index = ((SPECIAL_NUMBER*quotients[i] +((inverse(subkey1,SPECIAL_NUMBER)[0]*(letter-subkey2))%SPECIAL_NUMBER)) ^ (ord(key[i])*ord(key[::-1][i]))) - ord(key[i]) - ord(key[::-1][i])
+
+				try:
+					decrypt.append(chr(index))
+				except ValueError:
+					decrypt.append(chr(random.randint(33,126)))
+
+		else:
+
+			raise ABCNotEstablished("ABC not established")
+
+		return ''.join(decrypt)
 
 m = Cipher()
-
 m.set_ABC()
-#s = m.random_ABC()
-s = m.set_seed(0)
-print (m.encrypt("Marco Martel","password"), ' -> Desplazamiento: ',s)
-
-#print(m.modify_msg("Cifrado __ sera aprobado? O es solo una porquería?","password",0))
+m.set_seed(0)
+print(m.encrypt("Hola Mundo","password"))
+print(m.decrypt("¿bbf¡+¿bbf¡q¿bcb¡;¿bde¡V¿bde¡a¿bdf¡l¿bde¡R¿bcb¡+¿bbf¡L¿bbf¡q","password"))
