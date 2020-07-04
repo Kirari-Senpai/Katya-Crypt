@@ -293,10 +293,23 @@ class Cipher:
 
 		return matrix
 
-	def __modify_msg(self,string,key,shift):
+	def __modify_msg(self,raw_string,key,shift):
+
+		"""
+
+		Devuelve la cadena alterada. 
+
+		A traves de los metodos de __build_matrix() y __shifts() para dividir la cadena en crudo
+		en trozos y luego utilizar desplazamientos para alterar la cadena original.
+
+		Parametros -> raw_string: cadena en crudo
+		              key: contraseña
+		              shift: desplazamiento
+
+		"""
 
 		if (shift!=0) and (shift<=len(key) and shift>0):
-			matrix = self.__build_matrix(string,len(key))
+			matrix = self.__build_matrix(raw_string,len(key))
 			return ''.join(self.__shifts(matrix,shift))
 
 		elif (shift!=0) and (shift>len(key) or shift<0):
@@ -365,9 +378,3 @@ class Cipher:
 			raise ABCNotEstablished("ABC not established")
 
 		return ''.join(decrypt)
-
-m = Cipher()
-m.set_ABC()
-m.set_seed(0)
-print(m.encrypt("Hola Mundo","password"))
-print(m.decrypt("¿bbf¡+¿bbf¡q¿bcb¡;¿bde¡V¿bde¡a¿bdf¡l¿bde¡R¿bcb¡+¿bbf¡L¿bbf¡q","password"))
