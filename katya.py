@@ -32,7 +32,25 @@ SPECIAL_NUMBER = 96
 
 
 # Formula de cifrado Katya: [ ( [(L+Lk+Lki) ^ (Lk*Lki))] % 96 ) * sk1 + sk2 ] % 96 
+
+# L: letra en crudo
+# Lk: letra de la contraseña
+# Lki: letra de la contraseña (invertida)
+# sk1: subclave 1
+# sk2: subclave 2
+
+# Ejemplo de contraseña invertida: key -> yek
+
+
+
 # Formula de descifrado Katya: [ [(96*Coc + (a^-1) * (Lc-sk2))%96] ^ [Lk*Lki] ] - Lk - Lki
+
+# Coc: cociente calculado 
+# a^-1: inversa del modulo calculado
+# Lc: letra cifrada
+# Lk: letra de la contraseña
+# Lki: letra de la contraseña (invertida)
+# sk2: subclave 2
 
 
 class Cipher:
