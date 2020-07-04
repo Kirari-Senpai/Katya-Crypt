@@ -20,12 +20,13 @@ Este deberá contar con una longitud de 96 carácteres distintos (por defecto ya
 #### Se recorre la cadena
 
 
+
 #### Aplicar regla a cada letra de la cadena
 
 Por cada letra de la cadena se le aplica la siguiente regla: [ ( [(L+Lk+Lki) ^ (Lk*Lki))] % 96 ) * sk1 + sk2 ] % 96.
-   Hagamos una pausa. Sé que parece bastante confusa, pero les explicaré, no es nada complicado.
+Hagamos una pausa. Sé que parece bastante confusa, pero les explicaré, no es nada complicado.
    
-   Los variables y sus descripciones son:
+Los variables y sus descripciones son:
    ```
    L: letra en crudo
    Lk: letra de la contraseña
@@ -34,12 +35,13 @@ Por cada letra de la cadena se le aplica la siguiente regla: [ ( [(L+Lk+Lki) ^ (
    sk2: subclave 2
    
    ```
-   Bien. ¿Pero que quiere decir esta regla? 
    
-   Bueno, básicamente:
+Bien. ¿Pero que quiere decir esta regla? 
    
-   a. Se suman los valores enteros de cada carácter de la cadena, contraseña y contraseña invertida.<br>
-   b. Se realiza el producto del carácter de la contraseña con el de la invertida.<br>
-   c. Luego que se tiene la suma y el producto de los pasos anteriores, se le aplica el <a href="https://en.wikipedia.org/wiki/Exclusive_or">operador XOR</a>.<br>
-   d. Al terminar el proceso, se realiza el módulo entre el resultado y 96, es decir: resultado mod 96.<br>
-   e. 
+Bueno, básicamente:
+   
+a) Se suman los valores enteros de cada carácter de la cadena, contraseña y contraseña invertida.<br>
+b) Se realiza el producto del carácter de la contraseña con el de la invertida.<br>
+c) Luego que se tiene la suma y el producto de los pasos anteriores, se le aplica el <a href="https://en.wikipedia.org/wiki/Exclusive_or">operador XOR</a>.<br>
+d) Al terminar el proceso, se realiza el módulo entre el resultado y 96, es decir: resultado mod 96.<br>
+e) 
