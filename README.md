@@ -35,6 +35,6 @@ El funcionamiento de dicho algoritmo se puede explicar de una manera sencilla:
    
    a. Se suman los valores enteros de cada carácter de la cadena, contraseña y contraseña invertida.<br>
    b. Se realiza el producto del carácter de la contraseña con el de la invertida.<br>
-   c. Luego que se tiene la suma y el producto de los pasos anteriores, se le aplica el <a href="https://en.wikipedia.org/wiki/Exclusive_or">operador XOR</a><br>.
-   d. Al terminar el proceso, se realiza el módulo entre el resultado y 96, es decir: resultado mod 96.
+   c. Luego que se tiene la suma y el producto de los pasos anteriores, se le aplica el <a href="https://en.wikipedia.org/wiki/Exclusive_or">operador XOR</a>.<br>
+   d. Al terminar el proceso, se realiza el módulo entre el resultado y 96, es decir: resultado mod 96.<br>
    e. 
