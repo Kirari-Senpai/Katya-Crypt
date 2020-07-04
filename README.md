@@ -19,3 +19,13 @@ El funcionamiento de dicho algoritmo se puede explicar de una manera sencilla:
 
 3) Por cada letra de la cadena le aplica la siguiente regla: [ ( [(L+Lk+Lki) ^ (Lk*Lki))] % 96 ) * sk1 + sk2 ] % 96.
    Hagamos una pausa acá. Sé que parece bastante confusa, pero les explicaré, no es nada complicado.
+   
+   Los variables son:
+   ```
+   L: letra en crudo
+   Lk: letra de la contraseña
+   Lki: letra de la contraseña (invertida)
+   sk1: subclave 1
+   sk2: subclave 2
+   
+   ```
