@@ -17,7 +17,7 @@ Este deberá contar con una longitud de 96 carácteres distintos (por defecto ya
  "<","=",">","@","[","\\","]","^","_","`","{","|","}","~","?"
 ```
 
-### Se recorre la cadena.
+### Se recorre la cadena
 
 
 ### Aplicar regla a cada letra de la cadena
