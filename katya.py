@@ -1,12 +1,13 @@
 #!/usr/bin/python3
 
-import string 
 import random
 import collections
 
 from math import gcd as coprime
 from sympy.core.numbers import igcdex as inverse
 
+
+# Excepciones personalizadas
 
 class ABCException(Exception):
 	pass
@@ -26,14 +27,13 @@ class ShiftInvalid(ShiftException):
 class SubkeysError(Exception):
 	pass
 
-class CipherException(Exception):
-	pass
-
 
 SPECIAL_NUMBER = 96	
 
 
-# Algoritmo de Katya: 
+# Formula de cifrado Katya: [ ( [(L+Lk+Lki) ^ (Lk*Lki))] % 96 ) * sk1 + sk2 ] % 96 
+# Formula de descifrado Katya: [ [(96*Coc + (a^-1) * (Lc-sk2))%96] ^ [Lk*Lki] ] - Lk - Lki
+
 
 class Cipher:
 
@@ -321,27 +321,47 @@ class Cipher:
 
 	# FUNCIONES PARA CIFRADO Y DESCIFRADO
 
-	def encrypt(self,string,key,string_shift=0):
-		
-		if (string_shift!=0):
-			string = self.__modify_msg(string,key,string_shift)
+	def encrypt(self,raw_string,key,string_shift=0):
 
-		key = self.__key_complete(string,key)
+		"""
+
+		Devuelve cadena cifrada.
+
+		Parametros -> raw_string: cadena en crudo (ejemplo) Hola Mundo
+		              key: contraseña para cifrar (ejemplo) key
+		              string_shift: entero para desplazamientos (alteracion de cadena) (ejemplo) 3
+
+		Salida: ¿bcb¡T¿bcg¡e¿bce¡w¿bcc¡X¿bcf¡r¿bcf¡F¿bcc¡7¿bce¡B¿bcf¡q¿bcc¡6
+
+		"""
+		
+		# Modificar cadena
+		if (string_shift!=0):
+			raw_string = self.__modify_msg(raw_string,key,string_shift)
+
+		# Completar key
+		key = self.__key_complete(raw_string,key)
+
+		# Asignar subclaves
 		sk1,sk2 = self.subkey1,self.subkey2
 
 		text = [] 
 
 		if (self.ABC!=None):
 
-			for i in range(len(string)):
+			for i in range(len(raw_string)):
 
-				calc = ( (ord(string[i]) + ord(key[i]) + ord(key[::-1][i])) ^ (ord(key[i])*ord(key[::-1][i])) )
+				# Calculo de cifrado 1
+				calc = ( (ord(raw_string[i]) + ord(key[i]) + ord(key[::-1][i])) ^ (ord(key[i])*ord(key[::-1][i])) )
 
-				root = ''.join([self.ABC[int(i)] for i in str(calc//SPECIAL_NUMBER)])
+				# Obetener cociente y convertirlo en un caracter del ABC
+				quotient = ''.join([self.ABC[int(i)] for i in str(calc//SPECIAL_NUMBER)])
 
-				index = ( (calc%SPECIAL_NUMBER) * sk1 + sk2 ) % SPECIAL_NUMBER 
+				# Calculo de cifrado 2
+				chr_n = ( (calc%SPECIAL_NUMBER) * sk1 + sk2 ) % SPECIAL_NUMBER 
 
-				text.append("¿"+root+"¡"+self.ABC[index])
+
+				text.append("¿"+quotient+"¡"+self.ABC[chr_n])
 
 		else:
 
@@ -350,11 +370,27 @@ class Cipher:
 		return ''.join(text)
 
 
-	def decrypt(self,string,key,order=0,subkey1=1,subkey2=1):
+	def decrypt(self,raw_string,key,order=0,string_shift=0,subkey1=1,subkey2=1):
 
+		"""
+
+		Devuelve cadena descifrada.
+
+		Parametros -> raw_string: cadena a descifrar (ejemplo) ¿bcb¡T¿bcg¡e¿bce¡w¿bcc¡X¿bcf¡r¿bcf¡F¿bcc¡7¿bce¡B¿bcf¡q¿bcc¡6
+		              key: contraseña para descifrar (ejemplo) key
+		              order: numero de orden del ABC (por defecto 0)
+		              subkey1: numero coprimo utilizado (por defecto 1)
+		              subkey2: numero desplazamiento en ABC (por defecto 1)
+
+		Salida: 
+
+		"""
+
+		# Ordenar ABC
 		self.ABC = self.set_ABC(order)
 
-		quotients,string = self.__clear_string(string)
+		# Obtener cadena modificada y cocientes
+		quotients,string = self.__clear_string(raw_string)
 
 		key = self.__key_complete(string,key)
 
@@ -364,17 +400,23 @@ class Cipher:
 
 			for i in range(len(string)):
 
-				letter = self.ABC.index(string[i])
+				# Obtener entero de la letra cifrada
+				n_letter = self.ABC.index(string[i])
 
-				index = ((SPECIAL_NUMBER*quotients[i] +((inverse(subkey1,SPECIAL_NUMBER)[0]*(letter-subkey2))%SPECIAL_NUMBER)) ^ (ord(key[i])*ord(key[::-1][i]))) - ord(key[i]) - ord(key[::-1][i])
+				# Calculo de descifrado
+				calc = ((SPECIAL_NUMBER*quotients[i] +((inverse(subkey1,SPECIAL_NUMBER)[0]*(n_letter-subkey2))%SPECIAL_NUMBER)) ^ (ord(key[i])*ord(key[::-1][i]))) - ord(key[i]) - ord(key[::-1][i])
 
 				try:
-					decrypt.append(chr(index))
+					decrypt.append(chr(calc))
 				except ValueError:
+					# Si hay caracteres inexistentes, seleccionarlos al azar
 					decrypt.append(chr(random.randint(33,126)))
 
 		else:
 
 			raise ABCNotEstablished("ABC not established")
+
+		# Reacomodar la cadena
+		decrypt = self.__shifts(decrypt,string_shift)
 
 		return ''.join(decrypt)
