@@ -17,10 +17,10 @@ El funcionamiento de dicho algoritmo se puede explicar de una manera sencilla:
 
 2) Se recorre la cadena.
 
-3) Por cada letra de la cadena le aplica la siguiente regla: [ ( [(L+Lk+Lki) ^ (Lk*Lki))] % 96 ) * sk1 + sk2 ] % 96.
-   Hagamos una pausa acá. Sé que parece bastante confusa, pero les explicaré, no es nada complicado.
+3) Por cada letra de la cadena se le aplica la siguiente regla: [ ( [(L+Lk+Lki) ^ (Lk*Lki))] % 96 ) * sk1 + sk2 ] % 96.
+   Hagamos una pausa. Sé que parece bastante confusa, pero les explicaré, no es nada complicado.
    
-   Los variables son:
+   Los variables y sus descripciones son:
    ```
    L: letra en crudo
    Lk: letra de la contraseña
@@ -29,3 +29,10 @@ El funcionamiento de dicho algoritmo se puede explicar de una manera sencilla:
    sk2: subclave 2
    
    ```
+   Bien. ¿Pero que quiere decir esta regla? 
+   
+   Bueno, básicamente:
+   
+   a. Se suman los valores enteros de cada carácter de la cadena, contraseña y contraseña invertida.
+   b. Se realiza el producto del carácter de la contraseña con el de la invertida.
+   c. Luego que se tiene la suma y el producto de los pasos anteriores, se le aplica el <a href="https://en.wikipedia.org/wiki/Exclusive_or">operador XOR</a>
