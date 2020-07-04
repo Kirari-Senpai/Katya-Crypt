@@ -15,4 +15,8 @@ El funcionamiento de dicho algoritmo se puede explicar de una manera sencilla:
  "<","=",">","@","[","\\","]","^","_","`","{","|","}","~","?"
 ```
 
-2) Se recorre la cadena y por cada letra, se le aplica la siguiente regla: [ ( [(L+Lk+Lki) ^ (Lk*Lki))] % 96 ) * sk1 + sk2 ] % 96  
+2) Se recorre la cadena.
+
+3) Por cada letra de la cadena le aplica la siguiente regla: [ ( [(L+Lk+Lki) ^ (Lk*Lki))] % 96 ) * sk1 + sk2 ] % 96.
+
+Hagamos una pausa acá. Sé que parece bastante confusa, pero les explicaré, no es nada complicado.
