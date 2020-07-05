@@ -101,3 +101,19 @@ Cada letra se transformará a su respectivo entero perteneciente al ABC.
 +q;ValR+Lq
 74 17 80 49 0 11 45 74 38 17
 ```
+
+#### Aplicar regla a cada entero
+
+Por cada entero la cadena se le aplica la siguiente regla: [ [(96*coc + (a^-1) * (Lc-sk2))%96] ^ [Lk*Lki] ] - Lk - Lki
+
+Los variables y sus descripciones son:
+
+```
+   L: letra cifrada en crudo
+   Lk: letra de la contraseña
+   Lki: letra de la contraseña (invertida)
+   coc: cociente calculado
+   sk2: subclave 2
+   
+```
+   
