@@ -85,3 +85,10 @@ Se toma la cadena cifrada en crudo y se divide el respectivo string. La primera 
 ```
 ([115, 115, 121, 134, 134, 135, 134, 121, 115, 115], +q;ValR+Lq)
 ```
+
+#### Autocomplementar el key con longitud de cadena
+
+```
++q;ValR+Lq
+passwordpa
+```
