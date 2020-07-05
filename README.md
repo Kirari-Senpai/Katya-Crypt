@@ -4,9 +4,9 @@ Katya es un algoritmo de cifrado simétrico simple desarrollado en Python.
 
 ## Funcionamiento general
 
-
-
 El funcionamiento de dicho algoritmo se puede explicar de una manera sencilla:
+
+### Cifrado 
 
 #### Establecer abecederio (o como quieran llamarlo)
 
@@ -71,3 +71,6 @@ Claro, además de esos carácteres, se añadirán extras, que son los cocientes 
 ```
 ¡bcd¿~¡bdc¿C¡bbg¿x¡bdg¿c¡jg¿I¡bdh¿t¡bbh¿n¡bdc¿A¡bcc¿)¡bcc¿m¡bcb¿]¡bcc¿)¡bdc¿:¡bbg¿W¡bdg¿t¡bab¿u¡bdg¿h¡bbg¿z¡bdc¿d¡bcd¿Ñ¡bcb¿0¡bcc¿n¡bcc¿´¡bdc¿ñ¡bbc¿~¡bdg¿>¡baa¿@¡bdg¿c¡bbh¿g¡bdc¿:¡bcd¿+
 ```
+
+### Descifrado
+
