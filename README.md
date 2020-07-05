@@ -74,3 +74,14 @@ Claro, además de esos carácteres, se añadirán extras, que son los cocientes 
 
 ### Descifrado
 
+#### Establecer abecederio
+
+Se setea el abecedario con el que que se cifraron los mensajes. 
+
+#### Limpieza de cadena cifrada
+
+Se toma la cadena cifrada en crudo y se divide el respectivo string. La primera parte con los divisores y la segunda con la cadena completa.
+
+```
+([115, 115, 121, 134, 134, 135, 134, 121, 115, 115], +q;ValR+Lq)
+```
