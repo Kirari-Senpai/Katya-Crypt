@@ -4,6 +4,8 @@ Katya es un algoritmo de cifrado simétrico simple desarrollado en Python.
 
 ## Funcionamiento general
 
+
+
 El funcionamiento de dicho algoritmo se puede explicar de una manera sencilla:
 
 #### Establecer abecederio (o como quieran llamarlo)
@@ -19,9 +21,9 @@ Este deberá contar con una longitud de 96 carácteres distintos (por defecto ya
 
 #### Se recorre la cadena
 
+Cada letra será transformada a su respectivo entero en Ascii.
 
-
-#### Aplicar regla a cada letra de la cadena
+#### Aplicar regla a cada entero
 
 Por cada letra de la cadena se le aplica la siguiente regla: [ ( [(L+Lk+Lki) ^ (Lk*Lki))] % 96 ) * sk1 + sk2 ] % 96.
 Hagamos una pausa. Sé que parece bastante confusa, pero les explicaré, no es nada complicado.
