@@ -92,3 +92,12 @@ Se toma la cadena cifrada en crudo y se divide el respectivo string. La primera 
 +q;ValR+Lq
 passwordpa
 ```
+
+#### Se recorre la cadena cifrada
+
+Cada letra se transformará a su respectivo entero perteneciente al ABC.
+
+```
++q;ValR+Lq
+74 17 80 49 0 11 45 74 38 17
+```
