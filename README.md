@@ -121,5 +121,3 @@ Los variables y sus descripciones son:
 En esta etapa también usaremos la misma variable llamada *resultado* como muestra. En principio:
 
 a) Debemos calcular el inverso modular
-b) 
-
