@@ -159,6 +159,20 @@ katya.set_ABC()
 
 <b>Nota: </b>por defecto el valor del método está en 0, por lo que si desea crear un ABC personalizado, entonces deberá pasarle una lista con una longitud de 96 elementos.
 
+Para encriptar un mensaje, usaremos el método encrypt:
+
+```
+msg = katya.encrypt("Hola Mundo","katya_pass")
+```
+
+Salida:
+
+```
+¿bdb¡x¿bbe¡q¿bbd¡\¿bed¡A¿jd¡!¿jd¡s¿bed¡o¿bbd¡^¿bbd¡-¿bdb¡7
+```
+
+
+
 ## Requerimientos
 
 Python 3.5 o superior
