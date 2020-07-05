@@ -42,6 +42,24 @@ Bueno, con el fin de hacer sencillas las cosas, usaremos una variable llamada *r
 a) Se suman los valores enteros de cada carácter de la cadena, contraseña y contraseña invertida. (Se almacena en *resultado*)<br>
 b) Se realiza el producto del carácter de la contraseña con el de la invertida, creemos una variable temp. (temp = Lk * Lki)<br>
 c) Luego, al *resultado* se le aplica el <a href="https://en.wikipedia.org/wiki/Exclusive_or">operador XOR</a>. (Se almacena en *resultado* = *resultado* ^ temp)<br>
-d) Al terminar el proceso, se realiza el módulo entre el resultado y 96. (Se almacena en *Resultado* = *resultado* mod 96)<br>
-e) Después a este *resultado* se le multiplica la subclave (sk1: coprimo con 96). (*Resultado* = *resultado* * sk1)<br>
-f) Luego, al mismo se le suma la subclave 2 (sk2: desplazamiento de cadena). (*Resultado* = *Resultado* + sk2)<br>
+d) Al terminar el proceso, se realiza el módulo entre el resultado y 96. (Se almacena en *resultado* = *resultado* mod 96)<br>
+e) Después a este *resultado* se le multiplica la subclave (sk1: coprimo con 96). (*resultado* = *resultado* * sk1)<br>
+f) Luego, al mismo se le suma la subclave 2 (sk2: desplazamiento de cadena). (*resultado* = *resultado* + sk2)<br>
+g) Como paso final, al *resultado* se le aplica módulo de 96 nuevamente. (*resultado* = *resultado* mod 96)
+
+Vieron que es bastante simple? :D
+
+#### Convertir enteros a letras
+
+Una vez que finaliza el paso anterior, directamente cada entero se asocia con un elemento del abecedario. Ejemplo:
+
+```
+94 29 24 2 35 20 13 27 72 12 87 72 79 50 20 21 7 26 3 41 54 13 75 14 94 83 84 2 6 79 74
+
+```
+
+Se transforma a:
+
+```
+~ C x c I t n A ) m ] ) : W t u h z d Ñ 0 n ´ ñ ~ > @ c g : +
+```
