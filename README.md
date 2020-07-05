@@ -122,7 +122,7 @@ En esta etapa también usaremos la misma variable llamada *resultado* como muest
 
 a) Debemos calcular el inverso modular a partir del coprimo y desplazamiento seleccionado en la etapa de cifrado. (*resultado* = ).
 
-## Como descargar e instalar dependencias?
+## Cómo descargar e instalar dependencias?
 
 Para instalar las dependencias, tipeamos lo siguiente:
 
@@ -135,6 +135,15 @@ Como siempre, clonamos el repositorio:
 ```
 git clone https://github.com/Kirari-Senpai/Katya-Crypt.git
 cd Katya-Crypt/
+```
+
+## Cómo se usa el cifrado Katya?
+
+Antes que nada importamos el módulo:
+
+```
+import katya
+
 ```
 
 ## Requerimientos
