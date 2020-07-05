@@ -42,5 +42,6 @@ Bueno, con el fin de hacer sencillas las cosas, usaremos una variable llamada *r
 a) Se suman los valores enteros de cada carácter de la cadena, contraseña y contraseña invertida. (Se almacena en *resultado*)<br>
 b) Se realiza el producto del carácter de la contraseña con el de la invertida, creemos una variable temp. (temp = Lk * Lki)<br>
 c) Luego, al *resultado* se le aplica el <a href="https://en.wikipedia.org/wiki/Exclusive_or">operador XOR</a>. (Se almacena en *resultado* = *resultado* ^ temp)<br>
-d) Al terminar el proceso, se realiza el módulo entre el resultado y 96, es decir: resultado mod 96.<br>
-e) 
+d) Al terminar el proceso, se realiza el módulo entre el resultado y 96. (Se almacena en *Resultado* = *resultado* mod 96)<br>
+e) Después a este *resultado* se le multiplica la subclave (sk1: coprimo con 96). (*Resultado* = *resultado* * sk1)<br>
+f) Luego, al mismo se le suma la subclave 2 (sk2: desplazamiento de cadena). (*Resultado* = *Resultado* + sk2)<br>
