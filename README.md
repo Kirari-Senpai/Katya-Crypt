@@ -151,7 +151,13 @@ Creamos el objeto katya:
 katya = katya.Katya()
 ```
 
+Establecemos el abecedario:
 
+```
+katya.set_ABC()
+```
+
+<b>Nota: </b>por defecto el valor del método está en 0, por lo que si desea crear un ABC personalizado, entonces deberá pasarle una lista con una longitud de 96 elementos.
 
 ## Requerimientos
 
