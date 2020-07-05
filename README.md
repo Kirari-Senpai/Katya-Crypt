@@ -27,21 +27,20 @@ Por cada letra de la cadena se le aplica la siguiente regla: [ ( [(L+Lk+Lki) ^ (
 Hagamos una pausa. Sé que parece bastante confusa, pero les explicaré, no es nada complicado.
    
 Los variables y sus descripciones son:
-   ```
+```
    L: letra en crudo
    Lk: letra de la contraseña
    Lki: letra de la contraseña (invertida)
    sk1: subclave 1
    sk2: subclave 2
-   
-   ```
+```
    
 Bien. ¿Pero que quiere decir esta regla? 
    
 Bueno, con el fin de hacer sencillas las cosas, usaremos una variable llamada *resultado* como muestra. Básicamente:
    
 a) Se suman los valores enteros de cada carácter de la cadena, contraseña y contraseña invertida. (Se almacena en *resultado*)<br>
-b) Se realiza el producto del carácter de la contraseña con el de la invertida. (Lk * Lki)<br>
-c) Luego, al resultado se le aplica el <a href="https://en.wikipedia.org/wiki/Exclusive_or">operador XOR</a>. (resultado ^ (Lk * Lki))<br>
+b) Se realiza el producto del carácter de la contraseña con el de la invertida, creemos una variable temp. (temp = Lk * Lki)<br>
+c) Luego, al *resultado* se le aplica el <a href="https://en.wikipedia.org/wiki/Exclusive_or">operador XOR</a>. (Se almacena en *resultado* = *resultado* ^ temp)<br>
 d) Al terminar el proceso, se realiza el módulo entre el resultado y 96, es decir: resultado mod 96.<br>
 e) 
