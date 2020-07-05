@@ -143,8 +143,15 @@ Antes que nada importamos el módulo:
 
 ```
 import katya
+```
+
+Creamos el objeto katya:
 
 ```
+katya = katya.Katya()
+```
+
+
 
 ## Requerimientos
 
