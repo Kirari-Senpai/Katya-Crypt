@@ -109,11 +109,17 @@ Por cada entero la cadena se le aplica la siguiente regla: [ [(96*coc + (a^-1) *
 Los variables y sus descripciones son:
 
 ```
-   L: letra cifrada en crudo
+   Coc: cociente calculado 
+   a^-1: inversa del modulo calculado
+   Lc: letra cifrada
    Lk: letra de la contraseña
    Lki: letra de la contraseña (invertida)
-   coc: cociente calculado
    sk2: subclave 2
    
 ```
-   
+
+En esta etapa también usaremos la misma variable llamada *resultado* como muestra. En principio:
+
+a) Debemos calcular el inverso modular
+b) 
+
