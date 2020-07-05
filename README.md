@@ -120,4 +120,23 @@ Los variables y sus descripciones son:
 
 En esta etapa también usaremos la misma variable llamada *resultado* como muestra. En principio:
 
-a) Debemos calcular el inverso modular
+a) Debemos calcular el inverso modular a partir del coprimo y desplazamiento seleccionado en la etapa de cifrado. (*resultado* = ).
+
+## Como descargar e instalar dependencias?
+
+Para instalar las dependencias, tipeamos lo siguiente:
+
+```
+pip install sympy 
+```
+
+Como siempre, clonamos el repositorio:
+
+```
+git clone https://github.com/Kirari-Senpai/Katya-Crypt.git
+cd Katya-Crypt/
+```
+
+## Requerimientos
+
+Python 3.5 o superior
