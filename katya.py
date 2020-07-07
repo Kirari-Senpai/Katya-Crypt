@@ -1,5 +1,12 @@
 #!/usr/bin/python3
 
+#  _  __   _ _______   ___      ___ _____   _____ _____ 
+# | |/ /  /_\_   _\ \ / /_\    / __| _ \ \ / / _ \_   _|
+# | ' <  / _ \| |  \ V / _ \  | (__|   /\ V /|  _/ | |  
+# |_|\_\/_/ \_\_|   |_/_/ \_\  \___|_|_\ |_| |_|   |_|
+#
+#                 Created by Kirari
+
 import random
 import collections
 
@@ -53,7 +60,7 @@ SPECIAL_NUMBER = 96
 # sk2: subclave 2
 
 
-class Cipher:
+class Katya:
 
 	def __init__ (self):
 
@@ -250,7 +257,9 @@ class Cipher:
 
 			num = random.randint(0,SPECIAL_NUMBER-1)
 
-			self.ABC = self.__shifts(self.ABC,num)
+			#self.ABC = self.__shifts(self.ABC,num)
+
+			random.Random(num).shuffle(self.ABC)
 
 			self.seed_ = num
 
@@ -281,7 +290,9 @@ class Cipher:
 
 			self.set_ABC(0)
 
-			self.ABC = self.__shifts(self.ABC,integer)
+			#self.ABC = self.__shifts(self.ABC,integer)
+
+			random.Random(integer).shuffle(self.ABC)
 
 			self.seed_ = integer
 
@@ -294,7 +305,7 @@ class Cipher:
 
 	# FUNCIONES PARA MODIFICAR MENSAJE
 
-	def __build_matrix(self,raw_string,long_key):
+	def __build_blocks(self,raw_string,long_key):
 
 		"""
 
@@ -311,26 +322,27 @@ class Cipher:
 
 		return matrix
 
-	def __modify_msg(self,raw_string,key,shift):
+
+	def __modify_msg(self,raw_string,rotate):
 
 		"""
 
 		Devuelve la cadena alterada. 
 
-		A traves de los metodos de __build_matrix() y __shifts() para dividir la cadena en crudo
-		en trozos y luego utilizar desplazamientos para alterar la cadena original.
+		A traves del método __shifts() utiliza desplazamientos 
+		para alterar la cadena original.
 
 		Parametros -> raw_string: cadena en crudo
-		              key: contraseña
-		              shift: desplazamiento
+		              rotate: desplazamiento
 
 		"""
 
-		if (shift!=0) and (shift<=len(key) and shift>0):
-			matrix = self.__build_matrix(raw_string,len(key))
-			return ''.join(self.__shifts(matrix,shift))
+		shift,rotate = abs(rotate),rotate
 
-		elif (shift!=0) and (shift>len(key) or shift<0):
+		if (shift!=0) and (shift<=len(raw_string)):
+			return ''.join(self.__shifts(list(raw_string),rotate))
+
+		elif (shift!=0) and (shift>len(raw_string)):
 			raise ShiftException("Displacement does not meet desired length")
 
 		else:
@@ -355,7 +367,7 @@ class Cipher:
 		
 		# Modificar cadena
 		if (string_shift!=0):
-			raw_string = self.__modify_msg(raw_string,key,string_shift)
+			raw_string = self.__modify_msg(raw_string,string_shift)
 
 		# Completar key
 		key = self.__key_complete(raw_string,key)
@@ -388,7 +400,7 @@ class Cipher:
 		return ''.join(text)
 
 
-	def decrypt(self,raw_string,key,order=0,string_shift=0,subkey1=1,subkey2=1):
+	def decrypt(self,raw_string,key,seed=0,string_shift=0,subkey1=1,subkey2=1):
 
 		"""
 
@@ -396,7 +408,7 @@ class Cipher:
 
 		Parametros -> raw_string: cadena a descifrar (ejemplo) ¿bcb¡T¿bcg¡e¿bce¡w¿bcc¡X¿bcf¡r¿bcf¡F¿bcc¡7¿bce¡B¿bcf¡q¿bcc¡6
 		              key: contraseña para descifrar (ejemplo) key
-		              order: numero de orden del ABC (por defecto 0)
+		              abc_order: numero de orden del ABC (por defecto 0)
 		              subkey1: numero coprimo utilizado (por defecto 1)
 		              subkey2: numero desplazamiento en ABC (por defecto 1)
 
@@ -405,14 +417,14 @@ class Cipher:
 		"""
 
 		# Ordenar ABC
-		self.ABC = self.set_ABC(order)
+		self.set_seed(seed)
 
 		# Obtener cadena modificada y cocientes
 		quotients,string = self.__clear_string(raw_string)
 
 		key = self.__key_complete(string,key)
 
-		decrypt = [] 
+		raw_decrypt = [] 
 
 		if (self.ABC!=None):
 
@@ -425,16 +437,19 @@ class Cipher:
 				calc = ((SPECIAL_NUMBER*quotients[i] +((inverse(subkey1,SPECIAL_NUMBER)[0]*(n_letter-subkey2))%SPECIAL_NUMBER)) ^ (ord(key[i])*ord(key[::-1][i]))) - ord(key[i]) - ord(key[::-1][i])
 
 				try:
-					decrypt.append(chr(calc))
+					raw_decrypt.append(chr(calc))
 				except ValueError:
 					# Si hay caracteres inexistentes, seleccionarlos al azar
-					decrypt.append(chr(random.randint(33,126)))
+					raw_decrypt.append(chr(random.randint(33,126)))
 
 		else:
 
 			raise ABCNotEstablished("ABC not established")
 
-		# Reacomodar la cadena
-		decrypt = self.__shifts(decrypt,string_shift)
+		if (string_shift!=0):
+			decrypt = self.__modify_msg(''.join(raw_decrypt),string_shift)
 
-		return ''.join(decrypt)
+		else:
+			decrypt = ''.join(raw_decrypt)
+
+		return decrypt
