@@ -137,7 +137,7 @@ git clone https://github.com/Kirari-Senpai/Katya-Crypt.git
 cd Katya-Crypt/
 ```
 
-## Cómo se usa el cifrado Katya?
+## Cómo se usa Katya?
 
 Antes que nada importamos el módulo:
 
@@ -159,6 +159,10 @@ katya.set_ABC()
 
 <b>Nota: </b>por defecto el valor del método está en 0, por lo que si desea crear un ABC personalizado, entonces deberá pasarle una lista con una longitud de 96 elementos.
 
+Ahora que tenemos todo preparado, empezaremos con el proceso de cifrado.
+
+### Cifrado
+
 Para encriptar un mensaje, usaremos el método encrypt:
 
 ```
@@ -171,7 +175,19 @@ Salida:
 ¿bdb¡x¿bbe¡q¿bbd¡\¿bed¡A¿jd¡!¿jd¡s¿bed¡o¿bbd¡^¿bbd¡-¿bdb¡7
 ```
 
+### Descifrado
 
+Para desencriptar el mensaje, usaremos el método decrypt:
+
+```
+msg = katya.decrypt("¿bdb¡x¿bbe¡q¿bbd¡\¿bed¡A¿jd¡!¿jd¡s¿bed¡o¿bbd¡^¿bbd¡-¿bdb¡7","katya_pass")
+```
+
+Salida:
+
+```
+Hola Mundo
+```
 
 ## Requerimientos
 
