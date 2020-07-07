@@ -28,7 +28,7 @@ class ABCInvalid(ABCException):
 class ShiftException(Exception):
 	pass
 
-class ShiftInvalid(ShiftException):
+class SeedException(ShiftException):
 	pass
 
 class SubkeysError(Exception):
@@ -218,7 +218,7 @@ class Katya:
 
 		"""
 
-		if (isinstance(abc,list)) and (len(abc)==SPECIAL_NUMBER) and (abc!=0):
+		if (isinstance(abc,list)) and (len(abc)==SPECIAL_NUMBER) and (abc!=0) and (len(abc)==len(set(abc))):
 
 			self.ABC = abc
 
@@ -286,7 +286,7 @@ class Katya:
 
 		"""
 
-		if (isinstance(integer,int)) and (integer<=SPECIAL_NUMBER-1 and integer>0):
+		if (isinstance(integer,int)) and (integer!=0):
 
 			self.set_ABC(0)
 
@@ -296,9 +296,9 @@ class Katya:
 
 			self.seed_ = integer
 
-		elif (isinstance(integer,int)) and (integer>SPECIAL_NUMBER-1 or integer<0):
+		else:
 
-			raise ShiftInvalid("Seed is not in the range (0-95)")
+			raise SeedException("The offset number must be less than or equal to the length of the string")
 
 		return self.seed_
 
