@@ -142,19 +142,19 @@ cd Katya-Crypt/
 Antes que nada importamos el módulo:
 
 ```
-import katya
+>>> import katya
 ```
 
 Creamos el objeto katya:
 
 ```
-katya = katya.Katya()
+>>> katya = katya.Katya()
 ```
 
 Establecemos el abecedario:
 
 ```
-katya.set_ABC()
+>>> katya.set_ABC()
 ```
 
 <b>Nota: </b>por defecto el valor del método está en 0, por lo que si desea crear un ABC personalizado, entonces deberá pasarle una lista con una longitud de 96 elementos.
@@ -166,7 +166,7 @@ Ahora que tenemos todo preparado, empezaremos con el proceso de cifrado.
 Para encriptar un mensaje, usaremos el método encrypt:
 
 ```
-msg = katya.encrypt("Hola Mundo","katya_pass")
+>>> msg = katya.encrypt("Hola Mundo","katya_pass")
 ```
 
 Salida:
@@ -180,7 +180,7 @@ Salida:
 Para desencriptar el mensaje, usaremos el método decrypt:
 
 ```
-msg = katya.decrypt("¿bda¡.¿bbd¡|¿bbf¡m¿bed¡u¿jd¡A¿jc¡*¿bed¡]¿bbf¡o¿bbf¡+¿bda¡K","katya_pass",katya.iv)
+>>> msg = katya.decrypt("¿bda¡.¿bbd¡|¿bbf¡m¿bed¡u¿jd¡A¿jc¡*¿bed¡]¿bbf¡o¿bbf¡+¿bda¡K","katya_pass",katya.iv)
 ```
 
 Salida:
@@ -202,6 +202,18 @@ Salida:
 >>> katya.ABC
 ['h', ')', 'p', '4', 'k', '9', 'm', 'A', '*', 'j', 'L', 'P', 'g', '\\', '$', 'Q', 'X', '2', 'Y', ']', 'e', '?', '^', '3', 'Z', 'i', 'E', '5', 't', 'D', 'l', '!', 'H', 'V', ';', 'R', 'I', '/', '=', '6', 'S', '@', 'M', 'd', 'x', 'b', '-', 'C', 'N', 'a', '`', 'z', '}', 'O', 'y', '%', '_', 'o', 'ñ', '(', 'G', 'J', 'w', '[', 'v', '0', 's', ':', "'", 'r', 'q', 'F', '&', '8', '+', 'n', 'W', '>', '~', '|', '#', 'u', '{', 'U', '<', '1', 'K', '7', 'Ñ', '"', 'B', 'c', '.', '´', 'T', 'f']
 ```
+
+Lo mismo podemos hacer con el método set_seed(). A diferencia del anterior, este es personalizado:
+
+```
+>>> katya.set_seed(10)
+10
+>>> 
+>>> katya.ABC
+['C', 'Y', '}', '=', '`', ';', '{', 'n', 'h', "'", 'g', '-', 'p', 'P', ')', 'Q', '3', 'd', '$', 'l', 'r', 'X', 'N', 'y', '!', '/', 'u', 'W', '<', ':', '&', '9', '2', 'T', '_', 'ñ', 'k', 'F', '"', '|', '[', 'D', 'A', '^', '\\', 'O', '@', '(', 'w', 'H', 's', 'm', 'i', '6', 'a', 'K', 'c', 'x', 'M', 'B', 'o', '1', 'V', '%', '+', '.', 'L', 'v', '4', 'G', 'J', '´', 'U', 'R', 'q', 'Z', 'f', 'S', 'E', 'j', 'Ñ', ']', '#', '~', 't', '>', 'I', '8', '5', 'z', 'b', '?', '7', '0', 'e', '*']
+```
+
+<b>ADVERTENCIA:</b> hay que considerar que si pierde el numero de orden o semilla, entonces, no podrá recuperar la información al momento de querer descifrarla.
 
 ## Requerimientos
 
