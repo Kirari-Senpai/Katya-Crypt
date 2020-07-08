@@ -19,6 +19,10 @@ Este deberá contar con una longitud de 96 carácteres distintos (por defecto ya
  "<","=",">","@","[","\\","]","^","_","`","{","|","}","~","?"
 ```
 
+#### Aplicar modo de operación CBC
+
+El modo <a href="https://es.wikipedia.org/wiki/Modos_de_operaci%C3%B3n_de_una_unidad_de_cifrado_por_bloques">CBC</a> nos permitirá dividir la cadena en bloque de longitud contraseña. 
+
 #### Se recorre la cadena
 
 Cada letra será transformada a su respectivo entero en Ascii.
