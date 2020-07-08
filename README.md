@@ -23,11 +23,15 @@ Este deberá contar con una longitud de 96 carácteres distintos (por defecto ya
 
 Si no sabe que es el modo CBC, <a href="https://es.wikipedia.org/wiki/Modos_de_operaci%C3%B3n_de_una_unidad_de_cifrado_por_bloques">haga click acá</a>.
 
-<b>Nota:</b> esta es una versión del mismo pero más simplificada y simple.<br><br>
+Acá le dejo una imagen del proceso:
 
-#### Se recorre la cadena
+<img src="https://upload.wikimedia.org/wikipedia/commons/d/d3/Cbc_encryption.png"/>
 
-Cada letra será transformada a su respectivo entero en Ascii.
+<b>Nota:</b> esta es una versión del mismo más simplificada y simple.<br><br>
+
+#### En medio del proceso de cifrado de cada bloque
+
+Cada carácter (ya con XOR aplicado con el IV) de ese bloque, será transformado a su respectivo entero en Ascii.
 
 #### Aplicar regla a cada entero
 
