@@ -30,7 +30,7 @@ Si no sabe que es el modo CBC, <a href="https://es.wikipedia.org/wiki/Modos_de_o
 
 #### Proceso *Block Cipher Encryption*
 
-Cada carácter (ya con XOR aplicado con el IV) de ese bloque, será transformado a su respectivo entero en Ascii.
+Cada carácter (ya con XOR aplicado con el IV) de ese bloque, será transformado a su respectivo entero.
 
 Por cada letra de la cadena se le aplica la siguiente regla: [ ( [(L+Lk+Lki) ^ (Lk*Lki))] % 96 ) * sk1 + sk2 ] % 96.
 Hagamos una pausa. Sé que parece bastante confusa, pero les explicaré, no es nada complicado.
