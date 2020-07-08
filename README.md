@@ -60,7 +60,7 @@ Vieron que es bastante simple? :D
 
 #### Convertir enteros a letras
 
-Una vez que finaliza el paso anterior, directamente cada entero se asocia con un elemento del abecedario. Ejemplo:
+Una vez que finaliza el proceso de *Block Cipher Encryption*, directamente cada entero se asocia con un elemento del abecedario. Ejemplo:
 
 ```
 94 29 24 2 35 20 13 27 72 12 87 72 79 50 20 21 7 26 3 41 54 13 75 14 94 83 84 2 6 79 74
@@ -73,7 +73,7 @@ Se transforma a:
 ~ C x c I t n A ) m ] ) : W t u h z d Ñ 0 n ´ ñ ~ > @ c g : +
 ```
 
-Claro, además de esos carácteres, se añadirán extras, que son los cocientes calculados de cada letra del paso *d*. Estos nos sirven para luego poder descifrarlos. Entonces, agregando estos a la cadena, quedan así:
+Claro, además de esos carácteres, se añadirán extras, que son los cocientes calculados de cada carácter del paso *d*. Estos nos sirven para luego poder descifrarlos. Entonces, agregando estos a la cadena, quedan así:
 
 ```
 ¡bcd¿~¡bdc¿C¡bbg¿x¡bdg¿c¡jg¿I¡bdh¿t¡bbh¿n¡bdc¿A¡bcc¿)¡bcc¿m¡bcb¿]¡bcc¿)¡bdc¿:¡bbg¿W¡bdg¿t¡bab¿u¡bdg¿h¡bbg¿z¡bdc¿d¡bcd¿Ñ¡bcb¿0¡bcc¿n¡bcc¿´¡bdc¿ñ¡bbc¿~¡bdg¿>¡baa¿@¡bdg¿c¡bbh¿g¡bdc¿:¡bcd¿+
