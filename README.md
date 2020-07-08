@@ -25,7 +25,8 @@ Este deberá contar con una longitud de 96 carácteres distintos (por defecto ya
 
 Si no sabe que es el modo CBC, <a href="https://es.wikipedia.org/wiki/Modos_de_operaci%C3%B3n_de_una_unidad_de_cifrado_por_bloques">haga click acá</a>.
 
-<b>Nota:</b> la versión que se implementó en este cifrado es más simplificada y simple. Por ejemplo, el IV y los bloques deben ser de longitud contraseña.<br><br>
+<b>Nota1:</b> la versión que se implementó en este cifrado es más simplificada y simple.
+<b>Nota2:</b> el IV y los bloques deben ser de longitud contraseña.<br><br>
 
 #### En medio del proceso de cifrado de cada bloque
 
