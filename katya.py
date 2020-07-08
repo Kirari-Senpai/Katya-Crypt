@@ -380,7 +380,7 @@ class Katya:
 
 	# FUNCIONES PARA CIFRADO Y DESCIFRADO
 
-	def encrypt(self,raw_string,password,string_shift=0):
+	def encrypt(self,raw_string,password,string_shift=0,iv=None):
 
 		"""
 
@@ -414,8 +414,10 @@ class Katya:
 			raw_blocks = self.__build_blocks(raw_string,len(raw_password))
 			
 			# Generar Vector de Inicializacion (IV)
-			self.iv = self.__generate_iv(len(raw_password))
-			iv = self.iv
+			if (iv==None):
+				self.iv = self.__generate_iv(len(raw_password))
+			else:
+				self.iv = iv
 
 			for raw_block in raw_blocks:
 
