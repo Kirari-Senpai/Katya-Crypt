@@ -28,11 +28,9 @@ Si no sabe que es el modo CBC, <a href="https://es.wikipedia.org/wiki/Modos_de_o
 <b>Nota1:</b> la versión que se implementó en este cifrado es más simplificada y simple.<br>
 <b>Nota2:</b> el IV y los bloques deben ser de longitud contraseña.<br><br>
 
-#### En medio del proceso de cifrado de cada bloque
+#### Proceso *Block Cipher Encryption*
 
 Cada carácter (ya con XOR aplicado con el IV) de ese bloque, será transformado a su respectivo entero en Ascii.
-
-#### Aplicar regla a cada entero
 
 Por cada letra de la cadena se le aplica la siguiente regla: [ ( [(L+Lk+Lki) ^ (Lk*Lki))] % 96 ) * sk1 + sk2 ] % 96.
 Hagamos una pausa. Sé que parece bastante confusa, pero les explicaré, no es nada complicado.
