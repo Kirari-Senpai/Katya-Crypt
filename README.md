@@ -23,7 +23,7 @@ Este deberá contar con una longitud de 96 carácteres distintos (por defecto ya
 
 ```
 Hola Mundo
-passwordpa
+katyakatya
 ```
 
 #### Aplicar modo de operación CBC
@@ -71,7 +71,6 @@ Una vez que finaliza el proceso de *Block Cipher Encryption*, directamente cada 
 
 ```
 68 54 93 92 8 23 89 35 64 49
-
 ```
 
 Se transforma a:
@@ -97,23 +96,23 @@ Se setea el abecedario con el que que se cifraron los mensajes.
 Se toma la cadena cifrada en crudo y se divide el respectivo string. La primera parte con los divisores y la segunda con la cadena completa.
 
 ```
-([115, 115, 121, 134, 134, 135, 134, 121, 115, 115], +q;ValR+Lq)
+([110, 119, 139, 119, 111, 111, 119, 143, 119, 107], %0}|iw_I!V)
 ```
 
 #### Autocomplementar el key con longitud de cadena
 
 ```
-+q;ValR+Lq
-passwordpa
+%0}|iw_I!V
+katyakatya
 ```
 
 #### Se recorre la cadena cifrada
 
-Cada letra se transformará a su respectivo entero perteneciente al ABC.
+Cada carácter se transformará a su respectivo entero perteneciente al ABC.
 
 ```
-+q;ValR+Lq
-74 17 80 49 0 11 45 74 38 17
+%0}|iw_I!V
+68 54 93 92 8 23 89 35 64 49
 ```
 
 #### Aplicar regla a cada entero
