@@ -32,10 +32,10 @@ class SubkeysError(KatyaException):
 	pass
 
 
-SPECIAL_NUMBER = 96	
+SPECIAL_NUMBER = 91	
 
 
-# Formula de cifrado Katya: [ ( [(L+Lk+Lki) ^ (Lk*Lki))] % 96 ) * sk1 + sk2 ] % 96 
+# Formula de cifrado Katya: [ ( [(L+Lk+Lki) ^ (Lk*Lki))] % 91 ) * sk1 + sk2 ] % 91 
 
 # L: letra en crudo
 # Lk: letra de la contraseña
@@ -47,7 +47,7 @@ SPECIAL_NUMBER = 96
 
 
 
-# Formula de descifrado Katya: [ [(96*Coc + (a^-1) * (Lc-sk2))%96] ^ [Lk*Lki] ] - Lk - Lki
+# Formula de descifrado Katya: [ [(91*Coc + (a^-1) * (Lc-sk2))%91] ^ [Lk*Lki] ] - Lk - Lki
 
 # Coc: cociente calculado 
 # a^-1: inversa del modulo calculado
@@ -236,7 +236,7 @@ class Katya:
 		siguientes reestricciones:
 
 		- abc tiene que ser una lista
-		- abc debe ser de longitud 96
+		- abc debe ser de longitud 91
 		- abc no deber tener caracteres repetidos
 
 		"""
@@ -247,10 +247,10 @@ class Katya:
 
 		elif (abc==0):
 
-			self.ABC = ["a","b","c","d","e","f","g","h","i","j","k","l","m","n","ñ","o","p","q","r","s","t","u","v","w","x","y","z",
-			            "A","B","C","D","E","F","G","H","I","J","K","L","M","N","Ñ","O","P","Q","R","S","T","U","V","W","X","Y","Z",
-			            "0","1","2","3","4","5","6","7","8","9","!","\"","#","$","%","&","'","(",")","*","+","´","-",".","/",
-			            ":",";","<","=",">","@","[","\\","]","^","_","`","{","|","}","~","?"]
+			self.ABC = ["a","b","c","d","e","f","g","h","i","j","k","l","m","n","o","p","q","r","s","t","u","v","w","x","y","z",
+			            "A","B","C","D","E","F","G","H","I","J","K","L","M","N","O","P","Q","R","S","T","U","V","W","X","Y","Z",
+			            "0","1","2","3","4","5","6","7","8","9","!","#","$","%","&","(",")","*","+","´","-",".","/",
+			            ":",";","<","=",">","@","[","]","^","_","`","{","|","}","~","?"]
 
 
 		else:
@@ -419,6 +419,8 @@ class Katya:
 			else:
 				self.iv = iv
 
+			iv = self.iv
+
 			for raw_block in raw_blocks:
 
 				# Aplicar operador XOR con el bloque en crudo y el IV
@@ -438,7 +440,7 @@ class Katya:
 					text.append("¿"+quotient+"¡"+self.ABC[chr_n])
 
 				# El resultado de cifrado de tal bloque, ahora es el IV	
-				iv = ''.join(block)
+				iv = block
 
 		else:
 
