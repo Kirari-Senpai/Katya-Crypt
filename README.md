@@ -23,9 +23,7 @@ Este deberá contar con una longitud de 96 carácteres distintos (por defecto ya
 
 Si no sabe que es el modo CBC, <a href="https://es.wikipedia.org/wiki/Modos_de_operaci%C3%B3n_de_una_unidad_de_cifrado_por_bloques">haga click acá</a>.
 
-<b>Nota:</b> esta es una versión del mismo pero más simplificada y simple.
-
-
+<b>Nota:</b> esta es una versión del mismo pero más simplificada y simple.<br><br>
 
 #### Se recorre la cadena
 
