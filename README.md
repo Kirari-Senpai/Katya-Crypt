@@ -232,14 +232,16 @@ Lo mismo podemos hacer con el método set_seed(). A diferencia del anterior, est
 '¿L´J¡)¿LLp¡r¿LLg¡3¿Lg´¡B¿mM¡a¿mM¡l¿Lg´¡H¿LLg¡;¿LL´¡S¿L´J¡{'
 >>>
 ```
-Y en efecto, se puede apreciar que la cadena de cifrado no es la misma que mostramos en el ejemplo anterior. Ahora, a descifrar:
+Y en efecto, se puede apreciar que la cadena de cifrado no es la misma que mostramos en el ejemplo anterior. Ahora, a descifrar, le pasamos como argumento seed, el valor entero obtenido:
 
 ```
->>> msg_decrypt = katya.decrypt(msg,"katya_pass",katya.iv)
+>>> msg_decrypt = katya.decrypt(msg,"katya_pass",katya.iv,seed=64)
 >>> 
 >>> msg_decrypt
 'Hola Mundo'
+>>>
 ```
+El mismo ejemplo se puede aplicar también para el método set_seed().
 
 <b>ADVERTENCIA:</b> hay que considerar que si pierde el numero de orden o semilla, entonces, no podrá recuperar la información al momento de querer descifrarla.
 
