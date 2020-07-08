@@ -213,6 +213,34 @@ Lo mismo podemos hacer con el método set_seed(). A diferencia del anterior, est
 ['C', 'Y', '}', '=', '`', ';', '{', 'n', 'h', "'", 'g', '-', 'p', 'P', ')', 'Q', '3', 'd', '$', 'l', 'r', 'X', 'N', 'y', '!', '/', 'u', 'W', '<', ':', '&', '9', '2', 'T', '_', 'ñ', 'k', 'F', '"', '|', '[', 'D', 'A', '^', '\\', 'O', '@', '(', 'w', 'H', 's', 'm', 'i', '6', 'a', 'K', 'c', 'x', 'M', 'B', 'o', '1', 'V', '%', '+', '.', 'L', 'v', '4', 'G', 'J', '´', 'U', 'R', 'q', 'Z', 'f', 'S', 'E', 'j', 'Ñ', ']', '#', '~', 't', '>', 'I', '8', '5', 'z', 'b', '?', '7', '0', 'e', '*']
 ```
 
+### Ejemplo sencillo
+
+```
+>>> import katya
+>>> 
+>>> katya = katya.Katya()
+>>> 
+>>> katya.set_ABC()
+['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'ñ', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z', 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'Ñ', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z', '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '!', '"', '#', '$', '%', '&', "'", '(', ')', '*', '+', '´', '-', '.', '/', ':', ';', '<', '=', '>', '@', '[', '\\', ']', '^', '_', '`', '{', '|', '}', '~', '?']
+>>> 
+>>> katya.random_ABC()
+64
+>>> 
+>>> msg = katya.encrypt("Hola Mundo","katya_pass")
+>>> 
+>>> msg
+'¿L´J¡)¿LLp¡r¿LLg¡3¿Lg´¡B¿mM¡a¿mM¡l¿Lg´¡H¿LLg¡;¿LL´¡S¿L´J¡{'
+>>>
+```
+Y en efecto, se puede apreciar que la cadena de cifrado no es la misma que mostramos en el ejemplo anterior. Ahora, a descifrar:
+
+```
+>>> msg_decrypt = katya.decrypt(msg,"katya_pass",katya.iv)
+>>> 
+>>> msg_decrypt
+'Hola Mundo'
+```
+
 <b>ADVERTENCIA:</b> hay que considerar que si pierde el numero de orden o semilla, entonces, no podrá recuperar la información al momento de querer descifrarla.
 
 ## Requerimientos
