@@ -16,22 +16,19 @@ from sympy.core.numbers import igcdex as inverse
 
 # Excepciones personalizadas
 
-class ABCException(Exception):
+class KatyaException(Exception):
 	pass
 
-class ABCNotEstablished(ABCException):
+class ABCException(KatyaException):
 	pass
 
-class ABCInvalid(ABCException):
+class ShiftException(KatyaException):
 	pass
 
-class ShiftException(Exception):
+class SeedException(KatyaException):
 	pass
 
-class SeedException(ShiftException):
-	pass
-
-class SubkeysError(Exception):
+class SubkeysError(KatyaException):
 	pass
 
 
@@ -46,7 +43,7 @@ SPECIAL_NUMBER = 96
 # sk1: subclave 1
 # sk2: subclave 2
 
-# Ejemplo de contraseña invertida: key -> yek
+# Ejemplo de contraseña invertida: password -> yek
 
 
 
@@ -67,9 +64,10 @@ class Katya:
 		self.ABC = None
 		self.seed_ = 0
 		self.subkey1,self.subkey2 = (1,1)
+		self.iv = None
 
 
-	# FUNCIONES OCULTAS
+	# METODOS OCULTOS
 
 	def __clear_string(self,string):
 
@@ -78,7 +76,7 @@ class Katya:
 		Devuelve una tupla de los cocientes de cada letra del mensaje cifrado 
 		y la cadena cifrada modificada.
 		
-		Parametros -> string: cadena cifrada (ejemplo) ¿bbf¡+¿bbf¡q¿bcb¡;¿bde¡V¿bde¡a¿bdf¡l¿bde¡R¿bcb¡+¿bbf¡L¿bbf¡q
+		Parametros -> string: string (ejemplo) ¿bbf¡+¿bbf¡q¿bcb¡;¿bde¡V¿bde¡a¿bdf¡l¿bde¡R¿bcb¡+¿bbf¡L¿bbf¡q
 
 		Salida: ([115,115,121,134,134,135,134,121,115,115],"+q;ValR+Lq;") 
 
@@ -103,35 +101,53 @@ class Katya:
 		return (quotients,new_string)
 
 
-	def __key_complete(self,raw_string,key):
+	def __password_complete(self,raw_string,password):
 
 		"""
 
-		Devuelve la key con la longitud de la cadena a cifrar.
+		Devuelve la password con la longitud de la cadena a cifrar.
 
-		Parametros -> raw_string: cadena no cifrada (ejemplo) Hola Mundo
-		              key: llave para cifrar (ejemplo) key
+		Parametros -> raw_string: string (ejemplo) Hola Mundo
+		              password: string (ejemplo)   key
 
 		Salida: keykeykeyk
 
 		"""
 
-		new_key = ""
+		new_password = ""
 
-		if (len(key)<=len(raw_string)):
+		if (len(password)<=len(raw_string)):
 
-			while (len(new_key)<len(raw_string)):
-				new_key += key
+			while (len(new_password)<len(raw_string)):
+				new_password += password
 			
-			if (len(new_key)>len(raw_string)):
-				new_key = new_key[:len(raw_string)]
+			if (len(new_password)>len(raw_string)):
+				new_password = new_password[:len(raw_string)]
 
 		else:
 
-			new_key = key[:len(raw_string)]
+			new_password = password[:len(raw_string)]
 
-		return new_key
+		return new_password
 
+
+	def __check_password(self,raw_string,raw_passwd):
+
+		""" 
+	
+		Devuelve password con longitud igual o menor a cadena a encriptar.
+
+		Parametros -> raw_string: string (ejemplo) Hola
+		              raw_passwd: string (ejemplo) katya_pass
+
+		salida: katy
+
+		"""
+
+		if (len(raw_passwd)>len(raw_string)):
+			raw_passwd = raw_passwd[:-(len(raw_passwd)-len(raw_string))]
+
+		return raw_passwd
 
 
 	def __shifts(self,generic_list,num):
@@ -155,6 +171,12 @@ class Katya:
 		return generic_list
 
 
+	def __generate_iv(self,long_password):
+
+		""" Generador de Vector de Inicializacion con longitud contraseña"""
+
+		return ''.join([chr(random.randint(33,126)) for i in range(long_password)])
+
 
 	# FUNCIONES PARA MANIPULACION DE SUBCLAVES
 
@@ -165,8 +187,8 @@ class Katya:
 		Devuelve una tupla con las dos subclaves para cifrar el mensaje. Tales
 		son un numero coprimo y el otro un desplazamiento.
 
-		Parametros -> a: numero coprimo (ejemplo) 1
-		              b: numero de desplazamiento (ejemplo) 1
+		Parametros -> a: integer coprime (ejemplo) 1
+		              b: integer (ejemplo) 1
 
 		Salida: (1,1)
 
@@ -208,13 +230,14 @@ class Katya:
 
 		Devuleve el abecedario que se utilizara para cifrar el mensaje.
 
-		Parametros -> abc: establecer abecedario (por defecto 0)
+		Parametros -> abc: integer or list (por defecto 0)
 
 		Se puede establecer un abecedario personalizado, solo debe cumplir las
 		siguientes reestricciones:
 
 		- abc tiene que ser una lista
 		- abc debe ser de longitud 96
+		- abc no deber tener caracteres repetidos
 
 		"""
 
@@ -232,7 +255,7 @@ class Katya:
 
 		else:
 			
-			raise ABCInvalid("ABC Invalid")
+			raise ABCException("ABC Invalid")
 
 		return self.ABC
 
@@ -244,10 +267,9 @@ class Katya:
 		Devuelve un entero que indica el orden en el que se encuentra el ABC, luego
 		de haber sido alterado aleatoriamente.
 
-		Se utiliza un numero aleatorio y a traves del metodo __shifts() se realiza 
-		el desplazamiento con tal numero. Hay que considerar que si pierde el numero
-		de orden o semilla entonces no podra recuperar la informacion al momento de
-		querer descifrarla.
+		Se utiliza un numero aleatorio y a traves del modulo random altera el ABC. 
+		Hay que considerar que si pierde el numero de orden o semilla entonces no 
+		podra recuperar la informacion al momento de querer descifrarla.
 
 		"""
 
@@ -257,15 +279,13 @@ class Katya:
 
 			num = random.randint(0,SPECIAL_NUMBER-1)
 
-			#self.ABC = self.__shifts(self.ABC,num)
-
 			random.Random(num).shuffle(self.ABC)
 
 			self.seed_ = num
 
 		else:
 
-			raise ABCNotEstablished("ABC not established")
+			raise ABCException("ABC not established")
 
 		return self.seed_
 
@@ -277,7 +297,7 @@ class Katya:
 		Devuelve un entero que indica el orden en el que se encuentra el ABC, luego
 		de haber sido alterado manualmente.
 
-		Parametros -> integer: entero que sera el desplazamiento para alterar el orden del ABC.
+		Parametros -> integer: entero que servira para alterar el orden del ABC.
 		                       Por defecto se encuentra en 0.
 
 		Al igual que el metodo random_ABC(), hay que considerar que si pierde el numero
@@ -286,39 +306,48 @@ class Katya:
 
 		"""
 
-		if (isinstance(integer,int)) and (integer!=0):
+		try:
 
-			self.set_ABC(0)
+			if (isinstance(integer,int)) and (integer!=0):
 
-			#self.ABC = self.__shifts(self.ABC,integer)
+				self.set_ABC(0)
 
-			random.Random(integer).shuffle(self.ABC)
+				#self.ABC = self.__shifts(self.ABC,integer)
 
-			self.seed_ = integer
+				random.Random(integer).shuffle(self.ABC)
 
-		else:
+				self.seed_ = integer
 
-			raise SeedException("The offset number must be less than or equal to the length of the string")
+		except SeedException:
+
+			print ("An error occurred while setting seed")
 
 		return self.seed_
 
 
 	# FUNCIONES PARA MODIFICAR MENSAJE
 
-	def __build_blocks(self,raw_string,long_key):
+	def __build_blocks(self,raw_string,len_password):
 
 		"""
 
 		Devuelve una lista con trozos de mensaje con longitud contraseña.
 
-		Parametros -> raw_string: (ejemplo) Hola Mundo
-		              long_key: entero (ejemplo) 3
+		Parametros -> raw_string: string (ejemplo) Hola Mundo
+		              len_password: integer (ejemplo) 4
 
-		Salida: ["Hol","a M","und","o"]
+		Salida: ["Hola"," Mun","do\0\0"]
+
+		Nota: si el ultimo elemento no tiene la misma longitud que la contraseña, 
+		      entonces se le agregaran caracteres nulos.
 
 		"""
 
-		matrix = [raw_string[i:i+long_key] for i in range(0,len(raw_string),long_key)]
+		matrix = [raw_string[i:i+len_password] for i in range(0,len(raw_string),len_password)]
+
+		if (len(matrix[-1:][0])<len_password):
+
+			matrix[len(matrix)-1] = matrix[-1:][0] + '\0'*(len_password - len(matrix[-1:][0]))
 
 		return matrix
 
@@ -351,15 +380,15 @@ class Katya:
 
 	# FUNCIONES PARA CIFRADO Y DESCIFRADO
 
-	def encrypt(self,raw_string,key,string_shift=0):
+	def encrypt(self,raw_string,password,string_shift=0):
 
 		"""
 
 		Devuelve cadena cifrada.
 
-		Parametros -> raw_string: cadena en crudo (ejemplo) Hola Mundo
-		              key: contraseña para cifrar (ejemplo) key
-		              string_shift: entero para desplazamientos (alteracion de cadena) (ejemplo) 3
+		Parametros -> raw_string: string (ejemplo) Hola Mundo
+		              password: string (ejemplo) password
+		              string_shift: integer (alteracion de cadena) (ejemplo) 3
 
 		Salida: ¿bcb¡T¿bcg¡e¿bce¡w¿bcc¡X¿bcf¡r¿bcf¡F¿bcc¡7¿bce¡B¿bcf¡q¿bcc¡6
 
@@ -369,8 +398,10 @@ class Katya:
 		if (string_shift!=0):
 			raw_string = self.__modify_msg(raw_string,string_shift)
 
-		# Completar key
-		key = self.__key_complete(raw_string,key)
+
+		# password en crudo y completado con logitud cadena
+		raw_password = self.__check_password(raw_string,password)
+		password = self.__password_complete(raw_string,raw_password)
 
 		# Asignar subclaves
 		sk1,sk2 = self.subkey1,self.subkey2
@@ -379,38 +410,54 @@ class Katya:
 
 		if (self.ABC!=None):
 
-			for i in range(len(raw_string)):
+			# Dividir cadena en crudo en trozos de longitud de clave
+			raw_blocks = self.__build_blocks(raw_string,len(raw_password))
+			
+			# Generar Vector de Inicializacion (IV)
+			self.iv = self.__generate_iv(len(raw_password))
+			iv = self.iv
 
-				# Calculo de cifrado 1
-				calc = ( (ord(raw_string[i]) + ord(key[i]) + ord(key[::-1][i])) ^ (ord(key[i])*ord(key[::-1][i])) )
+			for raw_block in raw_blocks:
 
-				# Obetener cociente y convertirlo en un caracter del ABC
-				quotient = ''.join([self.ABC[int(i)] for i in str(calc//SPECIAL_NUMBER)])
+				# Aplicar operador XOR con el bloque en crudo y el IV
+				block = ''.join([chr(ord(a) ^ ord(b)) for a,b in zip(raw_block,iv)])
 
-				# Calculo de cifrado 2
-				chr_n = ( (calc%SPECIAL_NUMBER) * sk1 + sk2 ) % SPECIAL_NUMBER 
+				# Para cada caracter del bloque
+				for i in range(len(block)):
 
+					# Se le aplica la regla de cifrado
 
-				text.append("¿"+quotient+"¡"+self.ABC[chr_n])
+					calc = ( (ord(block[i]) + ord(raw_password[i]) + ord(raw_password[::-1][i])) ^ (ord(raw_password[i])*ord(raw_password[::-1][i])) )
+
+					quotient = ''.join([self.ABC[int(i)] for i in str(calc//SPECIAL_NUMBER)])
+
+					chr_n = ( (calc%SPECIAL_NUMBER) * sk1 + sk2 ) % SPECIAL_NUMBER
+
+					text.append("¿"+quotient+"¡"+self.ABC[chr_n])
+
+				# El resultado de cifrado de tal bloque, ahora es el IV	
+				iv = ''.join(block)
 
 		else:
 
-			raise ABCNotEstablished("ABC not established")
+			raise ABCException("ABC not established")
 
 		return ''.join(text)
 
 
-	def decrypt(self,raw_string,key,seed=0,string_shift=0,subkey1=1,subkey2=1):
+	def decrypt(self,raw_string,password,iv,seed=0,string_shift=0,subkey1=1,subkey2=1):
 
 		"""
 
 		Devuelve cadena descifrada.
 
-		Parametros -> raw_string: cadena a descifrar (ejemplo) ¿bcb¡T¿bcg¡e¿bce¡w¿bcc¡X¿bcf¡r¿bcf¡F¿bcc¡7¿bce¡B¿bcf¡q¿bcc¡6
-		              key: contraseña para descifrar (ejemplo) key
-		              abc_order: numero de orden del ABC (por defecto 0)
-		              subkey1: numero coprimo utilizado (por defecto 1)
-		              subkey2: numero desplazamiento en ABC (por defecto 1)
+		Parametros -> raw_string: string (ejemplo) ¿bcb¡T¿bcg¡e¿bce¡w¿bcc¡X¿bcf¡r¿bcf¡F¿bcc¡7¿bce¡B¿bcf¡q¿bcc¡6
+		              password: string (ejemplo) password
+		              iv: string
+		              seed: integer (por defecto 0)
+		              string_shift: integer (por defecto 0)
+		              subkey1: integer coprime (por defecto 1)
+		              subkey2: integer (por defecto 1)
 
 		Salida: 
 
@@ -422,7 +469,8 @@ class Katya:
 		# Obtener cadena modificada y cocientes
 		quotients,string = self.__clear_string(raw_string)
 
-		key = self.__key_complete(string,key)
+		raw_password = self.__check_password(raw_string,password)
+		password = self.__password_complete(string,raw_password)
 
 		raw_decrypt = [] 
 
@@ -434,7 +482,7 @@ class Katya:
 				n_letter = self.ABC.index(string[i])
 
 				# Calculo de descifrado
-				calc = ((SPECIAL_NUMBER*quotients[i] +((inverse(subkey1,SPECIAL_NUMBER)[0]*(n_letter-subkey2))%SPECIAL_NUMBER)) ^ (ord(key[i])*ord(key[::-1][i]))) - ord(key[i]) - ord(key[::-1][i])
+				calc = ((SPECIAL_NUMBER*quotients[i] +((inverse(subkey1,SPECIAL_NUMBER)[0]*(n_letter-subkey2))%SPECIAL_NUMBER)) ^ (ord(password[i])*ord(password[::-1][i]))) - ord(password[i]) - ord(password[::-1][i])
 
 				try:
 					raw_decrypt.append(chr(calc))
@@ -444,12 +492,44 @@ class Katya:
 
 		else:
 
-			raise ABCNotEstablished("ABC not established")
+			raise ABCException("ABC not established")
 
-		if (string_shift!=0):
-			decrypt = self.__modify_msg(''.join(raw_decrypt),string_shift)
+		# Cadena en texto plano en formato lista
+		decrypt = []
 
-		else:
-			decrypt = ''.join(raw_decrypt)
+		raw_blocks = self.__build_blocks(''.join(raw_decrypt),len(raw_password))
 
-		return decrypt
+		for raw_block in raw_blocks:
+
+			block = []
+
+			if (iv!=None):
+
+				for a,b in zip(raw_block,iv):
+
+					ordinal_chr = ord(a) ^ ord(b)
+
+					# Si entero supero tal numero, significa que es un caracter invalido,
+					# por lo que se cambia por un caracter valido.
+					if (ordinal_chr<=55291): 
+						block.append(chr(ordinal_chr))
+					else:
+						block.append(chr(random.randint(33,255)))
+
+				# Cada bloque de descifrado se agrega a la lista
+				decrypt.append(''.join(block))
+
+				# IV toma el valor del trozo de cadena actual
+				iv = raw_block
+
+			else:
+
+				raise KatyaException("The IV is not valid for use")
+
+		#if (string_shift!=0):
+		#	decrypt = self.__modify_msg(''.join(raw_decrypt),string_shift)
+
+		#else:
+		#	decrypt = ''.join(raw_decrypt)
+
+		return ''.join(decrypt)
