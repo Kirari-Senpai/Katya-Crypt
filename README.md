@@ -74,7 +74,7 @@ Claro, además de esos carácteres, se añadirán extras, que son los cocientes 
 
 ### Descifrado
 
-#### Establecer abecederio
+#### Establecer abecedario
 
 Se setea el abecedario con el que que se cifraron los mensajes. 
 
