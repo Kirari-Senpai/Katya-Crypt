@@ -172,7 +172,7 @@ msg = katya.encrypt("Hola Mundo","katya_pass")
 Salida:
 
 ```
-¿bdb¡x¿bbe¡q¿bbd¡\¿bed¡A¿jd¡!¿jd¡s¿bed¡o¿bbd¡^¿bbd¡-¿bdb¡7
+¿bda¡.¿bbd¡|¿bbf¡m¿bed¡u¿jd¡A¿jc¡*¿bed¡]¿bbf¡o¿bbf¡+¿bda¡K
 ```
 
 ### Descifrado
@@ -180,7 +180,7 @@ Salida:
 Para desencriptar el mensaje, usaremos el método decrypt:
 
 ```
-msg = katya.decrypt("¿bdb¡x¿bbe¡q¿bbd¡\¿bed¡A¿jd¡!¿jd¡s¿bed¡o¿bbd¡^¿bbd¡-¿bdb¡7","katya_pass")
+msg = katya.decrypt("¿bda¡.¿bbd¡|¿bbf¡m¿bed¡u¿jd¡A¿jc¡*¿bed¡]¿bbf¡o¿bbf¡+¿bda¡K","katya_pass",katya.iv)
 ```
 
 Salida:
