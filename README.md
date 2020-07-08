@@ -39,7 +39,7 @@ Si no sabe que es el modo CBC, <a href="https://es.wikipedia.org/wiki/Modos_de_o
 
 Cada carácter (ya con XOR aplicado con el IV) de ese bloque, será transformado a su respectivo entero.
 
-Por cada letra de la cadena se le aplica la siguiente regla: [ ( [(L+Lk+Lki) ^ (Lk*Lki))] % 96 ) * sk1 + sk2 ] % 96.
+Por cada letra de la cadena se le aplica la siguiente regla: [ ( [(L+Lk+Lki) ^ (Lk*Lki))] % 91 ) * sk1 + sk2 ] % 91.
 Hagamos una pausa. Sé que parece bastante confusa, pero les explicaré, no es nada complicado.
    
 Los variables y sus descripciones son:
@@ -117,7 +117,7 @@ Cada carácter se transformará a su respectivo entero perteneciente al ABC.
 
 #### Aplicar regla a cada entero
 
-Por cada entero la cadena se le aplica la siguiente regla: [ [(96*coc + (a^-1) * (Lc-sk2))%96] ^ [Lk*Lki] ] - Lk - Lki
+Por cada entero la cadena se le aplica la siguiente regla: [ [(91*coc + (a^-1) * (Lc-sk2))%91] ^ [Lk*Lki] ] - Lk - Lki
 
 Los variables y sus descripciones son:
 
