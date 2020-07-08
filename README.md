@@ -157,7 +157,7 @@ Establecemos el abecedario:
 >>> katya.set_ABC()
 ```
 
-<b>Nota: </b>por defecto el valor del método está en 0, por lo que si desea crear un ABC personalizado, entonces deberá pasarle una lista con una longitud de 96 elementos.
+<b>Nota: </b>por defecto el valor del método está en 0, por lo que si desea crear un ABC personalizado, entonces deberá pasarle una lista con una longitud de 96 elementos y los mismos no deben estar repetidos.
 
 Ahora que tenemos todo preparado, empezaremos con el proceso de cifrado.
 
