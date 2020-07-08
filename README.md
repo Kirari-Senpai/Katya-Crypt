@@ -21,13 +21,11 @@ Este deberá contar con una longitud de 96 carácteres distintos (por defecto ya
 
 #### Aplicar modo de operación CBC
 
-Si no sabe que es el modo CBC, <a href="https://es.wikipedia.org/wiki/Modos_de_operaci%C3%B3n_de_una_unidad_de_cifrado_por_bloques">haga click acá</a>.
-
-Acá le dejo una imagen del proceso:
-
 <img src="https://upload.wikimedia.org/wikipedia/commons/d/d3/Cbc_encryption.png"/>
 
-<b>Nota:</b> esta es una versión del mismo más simplificada y simple.<br><br>
+Si no sabe que es el modo CBC, <a href="https://es.wikipedia.org/wiki/Modos_de_operaci%C3%B3n_de_una_unidad_de_cifrado_por_bloques">haga click acá</a>.
+
+<b>Nota:</b> la versión que se implementó en este cifrado es más simplificada y simple.<br><br>
 
 #### En medio del proceso de cifrado de cada bloque
 
