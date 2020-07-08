@@ -21,7 +21,7 @@ Este deberá contar con una longitud de 96 carácteres distintos (por defecto ya
 
 #### Aplicar modo de operación CBC
 
-El modo <a href="https://es.wikipedia.org/wiki/Modos_de_operaci%C3%B3n_de_una_unidad_de_cifrado_por_bloques">CBC</a> nos permitirá dividir la cadena en bloque de longitud contraseña. 
+Si no sabe que es el modo CBC, <a href="https://es.wikipedia.org/wiki/Modos_de_operaci%C3%B3n_de_una_unidad_de_cifrado_por_bloques">haga click acá</a>.
 
 #### Se recorre la cadena
 
