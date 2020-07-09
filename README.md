@@ -40,8 +40,8 @@ katyakatya
 
 Si no sabe que es el modo CBC, [haga click aquí](https://es.wikipedia.org/wiki/Modos_de_operaci%C3%B3n_de_una_unidad_de_cifrado_por_bloques).
 
-**Nota1:** la versión que se implementó en este cifrado es más simplificada y simple.
-**Nota2:** el IV y los bloques deben ser de longitud contraseña.
+**Nota1:** la versión que se implementó en este cifrado es más simplificada y simple. <br>
+ **Nota2:** el IV y los bloques deben ser de longitud contraseña.
 
 #### Proceso *Block Cipher Encryption*
 
@@ -69,8 +69,10 @@ Bueno, con el fin de hacer sencillas las cosas, usaremos una variable llamada *r
 >     Hola Mundo         # Cadena
 >     katya              # Contraseña
 
-**Nota:** la contraseña invertida seria así -> aytak (de ahí viene el carácter "a" seleccionado)
+**Nota:** la contraseña invertida seria así -> aytak (de ahí viene el carácter "a" seleccionado)  <br>
 **Advertencia:** a pesar de que este ejemplo está hecho con el carácter de la cadena original, en el proceso BCE (Block Cipher Encryption), se usa el carácter transformado por la operación XOR con el IV y la cadena. Pero para no confundir mucho, directamente se mostrará el ejemplo con el entero del carácter original.  
+
+<br>
 
 Los valores de las mismos son *(L=72,Lk=107,Lki=97,sk1=1,sk2=1)*. Entonces básicamente:
 
