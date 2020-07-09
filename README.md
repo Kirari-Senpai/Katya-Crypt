@@ -58,8 +58,14 @@ Bien. ¿Pero que quiere decir esta regla?
    
 Bueno, con el fin de hacer sencillas las cosas, usaremos una variable llamada *resultado* como muestra y cada variable tendrá respectivos valores (L=100,Lk=105,Lki=90,sk1=1,sk2=1). Básicamente:
 
-a) Se suman los valores enteros de cada carácter de la cadena, contraseña y contraseña invertida: 
+a) Se suman los valores enteros de cada carácter de la cadena, contraseña y contraseña invertida:
 <img src="https://i.imgur.com/nFOZdex.png"/>
+
+b) Se realiza el producto del carácter de la contraseña con el de la invertida, para luego usar el <a href="https://en.wikipedia.org/wiki/Exclusive_or">operador XOR</a>:
+<img src="https://i.imgur.com/857AnSd.png"/>
+
+c)
+
 
 Vieron que es bastante simple? :D
 
