@@ -213,7 +213,7 @@ Establecemos el abecedario:
 >>> katya.set_ABC()
 ```
 
-<b>Nota: </b>por defecto el valor del método está en 0, por lo que si desea crear un ABC personalizado, entonces deberá pasarle una lista con una longitud de 96 elementos y los mismos no deben estar repetidos.
+**Nota:** por defecto el valor del método está en 0, por lo que si desea crear un ABC personalizado, entonces deberá pasarle una lista con una longitud de 91 elementos y los mismos no deben estar repetidos.
 
 Ahora que tenemos todo preparado, empezaremos con el proceso de cifrado.
 
@@ -247,7 +247,11 @@ Hola Mundo
 
 ## Necesito más seguridad, es posible?
 
-Por supuesto! Con el método random_ABC() alterarás el orden original del alfabeto, por lo que darás más dificultad al atacante para saber cuál es el orden correcto. De modo que al individuo que intenta desencriptar el mensaje, no le servirá de nada obtener la contraseña si no sabe el orden de los elementos.
+Por supuesto! Hay varios métodos:
+
+### Método random_ABC() y set_seed()
+
+Con el método random_ABC() alterarás el orden original del alfabeto, por lo que darás más dificultad al atacante para saber cuál es el orden correcto. De modo que al individuo que intenta desencriptar el mensaje, no le servirá de nada obtener la contraseña si no sabe el orden de los elementos.
 
 La salida del mismo es la semilla, es decir, el número en el cual estará ordenado tu ABC.
 
@@ -270,7 +274,7 @@ Lo mismo podemos hacer con el método set_seed(). A diferencia del anterior, est
 >>>
 ```
 
-### Ejemplo sencillo
+#### Ejemplo sencillo
 
 ```
 >>> import katya
@@ -301,6 +305,44 @@ Y en efecto, se puede apreciar que la cadena de cifrado no es la misma que mostr
 El mismo ejemplo se puede aplicar también para el método set_seed().
 
 **Advertencia:** hay que considerar que si pierde el numero de orden o semilla, entonces, no podrá recuperar la información al momento de querer descifrarla.
+
+### Método subkeys()
+
+Con este método se puede establecer las dos subclaves de las que estábamos hablando antes. Bueno, con la primer subclave estableceremos un número coprimo con 91 y con la segunda un número de desplazamiento para la cadena misma. Veamos un ejemplo sencillo:
+
+```
+>>> import katya
+>>> 
+>>> katya = katya.Katya()
+>>> 
+>>> katya.set_ABC()
+['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'ñ', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z', 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'Ñ', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z', '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '!', '"', '#', '$', '%', '&', "'", '(', ')', '*', '+', '´', '-', '.', '/', ':', ';', '<', '=', '>', '@', '[', '\\', ']', '^', '_', '`', '{', '|', '}', '~', '?']
+>>> 
+>>> katya.subkeys(80,10)
+(80,10)
+>>> 
+>>> msg = katya.encrypt("Hola Mundo","katya")
+>>> 
+>>> msg
+'¿bbh¡X¿bcg¡c¿bfa¡u¿bcf¡2¿bbd¡(¿bbd¡7¿bcf¡2¿bfb¡z¿bcg¡R¿bbh¡F'
+>>>
+```
+
+Vemos que el resultado de cifrado no es el mismo que este:
+
+> ¿bbh¡o¿bcg¡k¿bfa¡6¿bcf¡}¿bbd¡!¿bbd¡´¿bcf¡}¿bfb¡P¿bcg¡~¿bbh¡5
+
+Si no tiene idea que número coprimo utilizar, no se preocupe, no tiene que calcular nada, puede utilizar el método show_possible_subkeys():
+
+```
+>>> katya.show_possible_subkeys()
+[1, 2, 3, 4, 5, 6, 8, 9, 10, 11, 12, 15, 16, 17, 18, 19, 20, 22, 23, 24, 25, 27, 29, 30, 31, 32, 33, 34, 36, 37, 38, 40, 41, 43, 44, 45, 46, 47, 48, 50, 51, 53, 54, 55, 57, 58, 59, 60, 61, 62, 64, 66, 67, 68, 69, 71, 72, 73, 74, 75, 76, 79, 80, 81, 82, 83, 85, 86, 87, 88, 89, 90]
+>>> 
+```
+
+Los valores de la subclave 2 debe ser de 1 a 91.
+
+Si bien este último método no es muy seguro, se puede combinar con los métodos anteriores y así mejorar la seguridad. Eso suena bien eh? :o
 
 ## Requerimientos
 
