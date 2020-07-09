@@ -117,7 +117,7 @@ Cada carácter se transformará a su respectivo entero perteneciente al ABC.
 
 #### Aplicar regla a cada entero
 
-Por cada entero la cadena se le aplica la siguiente regla: [ [(91*coc + (a^-1) * (Lc-sk2))%91] ^ [Lk*Lki] ] - Lk - Lki
+Por cada entero la cadena se le aplica la siguiente regla: [ [(91* coc + (a^-1) * (Lc-sk2))%91] ^ [Lk*Lki] ] - Lk - Lki
 
 Los variables y sus descripciones son:
 
