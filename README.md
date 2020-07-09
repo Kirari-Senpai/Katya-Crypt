@@ -41,7 +41,7 @@ Cada carácter (ya con XOR aplicado con el IV) de ese bloque, será transformado
 
 Por cada letra de la cadena se le aplica la siguiente regla:
 
-<img src="https://i.imgur.com/DnJ4e9w.png"/>
+<img src="https://i.imgur.com/RhSHT2q.png"/>
 
 Hagamos una pausa. Sé que parece bastante confusa, pero les explicaré, no es nada complicado.
    
