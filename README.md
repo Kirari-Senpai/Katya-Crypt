@@ -56,15 +56,10 @@ Los variables y sus descripciones son:
    
 Bien. ¿Pero que quiere decir esta regla? 
    
-Bueno, con el fin de hacer sencillas las cosas, usaremos una variable llamada *resultado* como muestra. Básicamente:
-   
-a) Se suman los valores enteros de cada carácter de la cadena, contraseña y contraseña invertida. (Se almacena en *resultado*)<br>
-b) Se realiza el producto del carácter de la contraseña con el de la invertida, creemos una variable temp. (temp = Lk * Lki)<br>
-c) Luego, al *resultado* se le aplica el <a href="https://en.wikipedia.org/wiki/Exclusive_or">operador XOR</a>. (Se almacena en *resultado* = *resultado* ^ temp)<br>
-d) Al terminar el proceso, se realiza el módulo entre el resultado y 91. (Se almacena en *resultado* = *resultado* mod 91)<br>
-e) Después a este *resultado* se le multiplica la subclave (sk1: coprimo con 96). (*resultado* = *resultado* * sk1)<br>
-f) Luego, al mismo se le suma la subclave 2 (sk2: desplazamiento de cadena). (*resultado* = *resultado* + sk2)<br>
-g) Como paso final, al *resultado* se le aplica módulo de 96 nuevamente. (*resultado* = *resultado* mod 91)
+Bueno, con el fin de hacer sencillas las cosas, usaremos una variable llamada *resultado* como muestra y cada variable tendrá respectivos valores (L=100,Lk=105,Lki=90,sk1=1,sk2=1). Básicamente:
+
+a) Se suman los valores enteros de cada carácter de la cadena, contraseña y contraseña invertida: 
+<img src="https://i.imgur.com/nFOZdex.png"/>
 
 Vieron que es bastante simple? :D
 
