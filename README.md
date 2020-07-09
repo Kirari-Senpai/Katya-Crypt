@@ -1,3 +1,4 @@
+
 # Katya-Crypt
 
 Katya es un algoritmo de cifrado simétrico simple desarrollado en Python.
@@ -8,9 +9,16 @@ El funcionamiento de dicho algoritmo se puede explicar de una manera sencilla:
 
 ### Cifrado 
 
-#### Establecer abecederio (o como quieran llamarlo)
+En el transcurso de todo este proceso, utilizaremos la cadena y contraseña: 
 
-Este deberá contar con una longitud de 96 carácteres distintos (por defecto ya tiene un orden):
+    Hola Mundo         # Cadena
+    katya              # Contraseña
+
+Esto con el fin de que se entienda mejor la explicación. Sin más que añadir, comencemos con el primer paso.
+
+#### Establecer abecedario (o como quieran llamarlo)
+
+Este deberá contar con una longitud de 91 caracteres distintos (por defecto ya tiene un orden):
 
 ```
 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z', 
@@ -19,7 +27,7 @@ Este deberá contar con una longitud de 96 carácteres distintos (por defecto ya
 '=', '>', '@', '[', ']', '^', '_', '`', '{', '|', '}', '~', '?'
 ```
 
-#### Autocomplementar el key con longitud de cadena
+#### Autocompletar la contraseña con longitud de cadena
 
 ```
 Hola Mundo
@@ -28,12 +36,12 @@ katyakatya
 
 #### Aplicar modo de operación CBC
 
-<img src="https://upload.wikimedia.org/wikipedia/commons/d/d3/Cbc_encryption.png"/>
+![enter image description here](https://upload.wikimedia.org/wikipedia/commons/d/d3/Cbc_encryption.png)
 
-Si no sabe que es el modo CBC, <a href="https://es.wikipedia.org/wiki/Modos_de_operaci%C3%B3n_de_una_unidad_de_cifrado_por_bloques">haga click acá</a>.
+Si no sabe que es el modo CBC, [haga click aquí](https://es.wikipedia.org/wiki/Modos_de_operaci%C3%B3n_de_una_unidad_de_cifrado_por_bloques).
 
-<b>Nota1:</b> la versión que se implementó en este cifrado es más simplificada y simple.<br>
-<b>Nota2:</b> el IV y los bloques deben ser de longitud contraseña.<br><br>
+**Nota1:** la versión que se implementó en este cifrado es más simplificada y simple.
+**Nota2:** el IV y los bloques deben ser de longitud contraseña.
 
 #### Proceso *Block Cipher Encryption*
 
@@ -41,7 +49,7 @@ Cada carácter (ya con XOR aplicado con el IV) de ese bloque, será transformado
 
 Por cada letra de la cadena se le aplica la siguiente regla:
 
-<img src="https://i.imgur.com/RhSHT2q.png"/>
+![](https://i.imgur.com/RhSHT2q.png)
 
 Hagamos una pausa. Sé que parece bastante confusa, pero les explicaré, no es nada complicado.
    
@@ -56,57 +64,84 @@ Los variables y sus descripciones son:
    
 Bien. ¿Pero que quiere decir esta regla? 
    
-Bueno, con el fin de hacer sencillas las cosas, usaremos una variable llamada *resultado* como muestra y cada variable tendrá respectivos valores (L=100,Lk=105,Lki=90,sk1=1,sk2=1). Básicamente:
+Bueno, con el fin de hacer sencillas las cosas, usaremos una variable llamada *resultado* y enteros de los caracteres "H", "k" y "a", que corresponden a la cadena, contraseña y contraseña invertida:
 
-a) Se suman los valores enteros de cada carácter de la cadena, contraseña y contraseña invertida:
-<img src="https://i.imgur.com/nFOZdex.png"/>
+>     Hola Mundo         # Cadena
+>     katya              # Contraseña
 
-b) Se realiza el producto del carácter de la contraseña con el de la invertida, para luego usar el <a href="https://en.wikipedia.org/wiki/Exclusive_or">operador XOR</a>:
-<img src="https://i.imgur.com/857AnSd.png"/>
+**Nota:** la contraseña invertida seria así -> aytak (de ahí viene el carácter "a" seleccionado)
+**Advertencia:** a pesar de que este ejemplo está hecho con el carácter de la cadena original, en el proceso BCE (Block Cipher Encryption), se usa el carácter transformado por la operación XOR con el IV y la cadena. Pero para no confundir mucho, directamente se mostrará el ejemplo con el entero del carácter original.  
 
-c)
+Los valores de las mismos son *(L=72,Lk=107,Lki=97,sk1=1,sk2=1)*. Entonces básicamente:
 
+**a)** Se suman los valores enteros de cada carácter de la cadena, contraseña y contraseña invertida:
 
-Vieron que es bastante simple? :D
+![enter image description here](https://i.imgur.com/lqdOc61.png)
 
-#### Convertir enteros a letras
+**b)** Se realiza el producto del carácter de la contraseña con el de la invertida, para luego aplicar el [operador XOR](https://en.wikipedia.org/wiki/Exclusive_or) con el resultado obtenido anteriormente:
+
+![enter image description here](https://i.imgur.com/njNjrvj.png)
+
+**c)** Al terminar el proceso, se realiza el módulo entre el resultado y 91 (cantidad de elementos del ABC):
+
+![enter image description here](https://i.imgur.com/e4UUt3X.png)
+
+**d)** Después a este *resultado* se le multiplica la subclave 1 (sk1: número coprimo con 91):
+
+![enter image description here](https://i.imgur.com/I95eG21.png)
+
+**e)** Luego, al mismo se le suma la subclave 2 (sk2: desplazamiento de cadena):
+
+![enter image description here](https://i.imgur.com/fPJC6X2.png)
+
+**f)** Como paso final, al *resultado* obtenido se le calcula, nuevamente, el módulo de 91 (en este caso el resto es el mismo):
+
+![enter image description here](https://i.imgur.com/UKIKMbR.png)
+
+Y listo, ya tendríamos el primer carácter ya cifrado. Vieron que es bastante simple? :D
+
+#### Convertir enteros a caracteres
 
 Una vez que finaliza el proceso de *Block Cipher Encryption*, directamente cada entero se asocia con un elemento del abecedario. Ejemplo:
 
 ```
-68 54 93 92 8 23 89 35 64 49
+14 10 58 88 62 71 88 41 89 57
 ```
 
 Se transforma a:
 
 ```
-'% 0 } | i w _ I ! V'
+ok6}!´}P~5
 ```
 
-Claro, además de esos carácteres, se añadirán extras, que son los cocientes calculados de cada carácter del paso *d*. Estos nos sirven para luego poder descifrarlos. Entonces, agregando estos a la cadena, quedan así:
+Claro, además de esos caracteres, se añadirán extras, que son los cocientes calculados de cada carácter del **paso c de Block Cipher Encryption**. Estos nos sirven para luego poder descifrarlos. Entonces, agregando estos a la cadena, quedan así:
 
 ```
-¿bba¡%¿bbj¡0¿bdj¡}¿bbj¡|¿bbb¡i¿bbb¡w¿bbj¡_¿bed¡I¿bbj¡!¿bah¡V
+¿bbh¡o¿bcg¡k¿bfa¡6¿bcf¡}¿bbd¡!¿bbd¡´¿bcf¡}¿bfb¡P¿bcg¡~¿bbh¡5
 ```
 
 ### Descifrado
 
 #### Establecer abecedario
 
-Se setea el abecedario con el que que se cifraron los mensajes. 
+Se establece el abecedario con el que que se cifraron los mensajes.  
 
 #### Limpieza de cadena cifrada
 
-Se toma la cadena cifrada en crudo y se divide el respectivo string. La primera parte con los divisores y la segunda con la cadena completa.
+Se toma la cadena cifrada en crudo: 
 
+> ¿bbh¡o¿bcg¡k¿bfa¡6¿bcf¡}¿bbd¡!¿bbd¡´¿bcf¡}¿bfb¡P¿bcg¡~¿bbh¡5
+
+Se divide el respectivo string. La primera parte con los cocientes de cada carácter y la segunda con la cadena cifrada original sin extras.
 ```
-([110, 119, 139, 119, 111, 111, 119, 143, 119, 107], %0}|iw_I!V)
+(["bbh","bcg","bfa","bcf","bbd","bbd","bcf","bfb","bcg","bbh"], ok6}!´}P~5) -> Forma genérica
+([117, 126, 150, 125, 113, 113, 125, 151, 126, 117], ok6}!´}P~5)
 ```
 
 #### Autocomplementar el key con longitud de cadena
 
 ```
-%0}|iw_I!V
+ok6}!´}P~5
 katyakatya
 ```
 
@@ -115,21 +150,21 @@ katyakatya
 Cada carácter se transformará a su respectivo entero perteneciente al ABC.
 
 ```
-%0}|iw_I!V
-68 54 93 92 8 23 89 35 64 49
+ok6}!´}P~5
+14 10 58 88 62 71 88 41 89 57
 ```
 
 #### Aplicar regla a cada entero
 
 Por cada entero la cadena se le aplica la siguiente regla:
 
-<img src="https://i.imgur.com/DXLpF7c.png"/>
+![enter image description here](https://i.imgur.com/DXLpF7c.png)
 
 Los variables y sus descripciones son:
 
 ```
-   Coc: cociente calculado 
-   a^-1: inversa del modulo calculado, esto es igual a inverse(sk1,len_)
+   C: cociente calculado 
+   a^-1: inversa del modulo calculado
    Lc: letra cifrada
    Lk: letra de la contraseña
    Lki: letra de la contraseña (invertida)
@@ -139,7 +174,7 @@ Los variables y sus descripciones son:
 
 En esta etapa también usaremos la misma variable llamada *resultado* como muestra. En principio:
 
-a) Debemos calcular el inverso modular a partir del coprimo y desplazamiento seleccionado en la etapa de cifrado. (*resultado* = inverse()).
+**a)** Debemos calcular el inverso modular a partir del coprimo y desplazamiento seleccionado en la etapa de cifrado:
 
 ## Cómo descargar e instalar dependencias?
 
@@ -185,13 +220,13 @@ Ahora que tenemos todo preparado, empezaremos con el proceso de cifrado.
 Para encriptar un mensaje, usaremos el método encrypt:
 
 ```
->>> msg = katya.encrypt("Hola Mundo","katya_pass")
+>>> msg = katya.encrypt("Hola Mundo","katya")
 ```
 
 Salida:
 
 ```
-¿bda¡.¿bbd¡|¿bbf¡m¿bed¡u¿jd¡A¿jc¡*¿bed¡]¿bbf¡o¿bbf¡+¿bda¡K
+¿bbh¡o¿bcg¡k¿bfa¡6¿bcf¡}¿bbd¡!¿bbd¡´¿bcf¡}¿bfb¡P¿bcg¡~¿bbh¡5
 ```
 
 ### Descifrado
@@ -199,7 +234,7 @@ Salida:
 Para desencriptar el mensaje, usaremos el método decrypt:
 
 ```
->>> msg = katya.decrypt("¿bda¡.¿bbd¡|¿bbf¡m¿bed¡u¿jd¡A¿jc¡*¿bed¡]¿bbf¡o¿bbf¡+¿bda¡K","katya_pass",katya.iv)
+>>> msg = katya.decrypt("¿bbh¡o¿bcg¡k¿bfa¡6¿bcf¡}¿bbd¡!¿bbd¡´¿bcf¡}¿bfb¡P¿bcg¡~¿bbh¡5","katya",katya.iv)
 ```
 
 Salida:
@@ -217,9 +252,10 @@ La salida del mismo es la semilla, es decir, el número en el cual estará orden
 Salida:
 ```
 >>> katya.random_ABC()
-57
+68 
 >>> katya.ABC
-['h', ')', 'p', '4', 'k', '9', 'm', 'A', '*', 'j', 'L', 'P', 'g', '\\', '$', 'Q', 'X', '2', 'Y', ']', 'e', '?', '^', '3', 'Z', 'i', 'E', '5', 't', 'D', 'l', '!', 'H', 'V', ';', 'R', 'I', '/', '=', '6', 'S', '@', 'M', 'd', 'x', 'b', '-', 'C', 'N', 'a', '`', 'z', '}', 'O', 'y', '%', '_', 'o', 'ñ', '(', 'G', 'J', 'w', '[', 'v', '0', 's', ':', "'", 'r', 'q', 'F', '&', '8', '+', 'n', 'W', '>', '~', '|', '#', 'u', '{', 'U', '<', '1', 'K', '7', 'Ñ', '"', 'B', 'c', '.', '´', 'T', 'f']
+['@', 'N', 'D', 'q', 'u', 'e', 'z', '`', 'k', 'g', 't', 'd', 'T', '2', '|', 'P', 'r', '(', 'c', '_', 'G', '{', '6', '>', 'Z', ';', 'V', ':', '^', 'x', '?', '´', 'A', 'X', '0', ']', 'm', '.', 's', 'M', '5', 'E', '#', ')', 'W', '&', 'K', 'Y', 'j', 'O', 'L', 'b', 'J', '-', 'S', 'i', '!', '~', 'I', 'C', 'B', '1', '[', 'a', '%', 'y', 'w', 'l', 'h', 'R', 'n', '9', '*', 'f', 'p', '=', 'v', 'U', '+', '4', 'Q', 'H', '8', '3', 'F', '/', '<', 'o', '$', '}', '7']
+>>> 
 ```
 
 Lo mismo podemos hacer con el método set_seed(). A diferencia del anterior, este es personalizado:
@@ -227,9 +263,9 @@ Lo mismo podemos hacer con el método set_seed(). A diferencia del anterior, est
 ```
 >>> katya.set_seed(10)
 10
->>> 
 >>> katya.ABC
-['C', 'Y', '}', '=', '`', ';', '{', 'n', 'h', "'", 'g', '-', 'p', 'P', ')', 'Q', '3', 'd', '$', 'l', 'r', 'X', 'N', 'y', '!', '/', 'u', 'W', '<', ':', '&', '9', '2', 'T', '_', 'ñ', 'k', 'F', '"', '|', '[', 'D', 'A', '^', '\\', 'O', '@', '(', 'w', 'H', 's', 'm', 'i', '6', 'a', 'K', 'c', 'x', 'M', 'B', 'o', '1', 'V', '%', '+', '.', 'L', 'v', '4', 'G', 'J', '´', 'U', 'R', 'q', 'Z', 'f', 'S', 'E', 'j', 'Ñ', ']', '#', '~', 't', '>', 'I', '8', '5', 'z', 'b', '?', '7', '0', 'e', '*']
+['q', '{', ')', '%', '=', '8', 'z', 'g', '-', '_', '<', '5', '4', '/', 's', 'd', 'Z', 'l', '*', '0', '#', '+', 'Y', 'v', 'S', ':', ';', 'M', '`', 'h', 'n', 'o', 'k', 'G', 'O', '>', 'E', 'B', '(', '[', '@', 'V', '^', 'I', '|', 'm', '$', '}', 'a', 'L', 'c', 'y', 'N', 'C', 'p', '3', 'X', 'D', 'i', 'x', 'Q', 't', 'R', 'w', '6', 'H', 'K', '´', 'W', 'T', 'r', '1', 'f', 'U', 'F', 'j', 'P', ']', '&', '~', 'u', 'J', '!', '7', 'A', 'b', '?', '9', '2', 'e', '.']
+>>>
 ```
 
 ### Ejemplo sencillo
@@ -245,16 +281,16 @@ Lo mismo podemos hacer con el método set_seed(). A diferencia del anterior, est
 >>> katya.random_ABC()
 64
 >>> 
->>> msg = katya.encrypt("Hola Mundo","katya_pass")
+>>> msg = katya.encrypt("Hola Mundo","katya")
 >>> 
 >>> msg
-'¿L´J¡)¿LLp¡r¿LLg¡3¿Lg´¡B¿mM¡a¿mM¡l¿Lg´¡H¿LLg¡;¿LL´¡S¿L´J¡{'
+'¿TT%¡#¿Ty!¡Q¿T9L¡G¿TyY¡3¿TTY¡m¿TTY¡Q¿Ty!¡t¿T9T¡e¿Ty9¡.¿TT%¡s'
 >>>
 ```
 Y en efecto, se puede apreciar que la cadena de cifrado no es la misma que mostramos en el ejemplo anterior. Ahora, a descifrar, le pasamos como argumento seed, el valor entero obtenido:
 
 ```
->>> msg_decrypt = katya.decrypt(msg,"katya_pass",katya.iv,seed=64)
+>>> msg_decrypt = katya.decrypt(msg,"katya",katya.iv,seed=64)
 >>> 
 >>> msg_decrypt
 'Hola Mundo'
@@ -262,7 +298,7 @@ Y en efecto, se puede apreciar que la cadena de cifrado no es la misma que mostr
 ```
 El mismo ejemplo se puede aplicar también para el método set_seed().
 
-<b>ADVERTENCIA:</b> hay que considerar que si pierde el numero de orden o semilla, entonces, no podrá recuperar la información al momento de querer descifrarla.
+**Advertencia:** hay que considerar que si pierde el numero de orden o semilla, entonces, no podrá recuperar la información al momento de querer descifrarla.
 
 ## Requerimientos
 
