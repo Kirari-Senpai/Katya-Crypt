@@ -194,7 +194,7 @@ En esta etapa descifraremos el carácter que mostramos en el proceso de cifrado.
 
 Al transformarlo a carácter, vemos que es la "H".
 
-**Nota:** aclaró de nuevo que acá utilizamos el mismo ejemplo que en la etapa de cifrado, con la diferencia que lo vamos a desencriptar. Esto es para mostrar el funcionamiento interno del mismo. 
+**Nota:** aclaro de nuevo que acá utilizamos el mismo ejemplo que en la etapa de cifrado, con la diferencia que lo vamos a desencriptar. Esto es para mostrar el funcionamiento interno del mismo. 
 
 #### Aplicando nuevamente el CBC pero de manera inversa
 
@@ -203,6 +203,8 @@ Al transformarlo a carácter, vemos que es la "H".
 En caso que no entiendan esta parte, ya les he dejado un enlace el cual explica el proceso ;) 
 
 #### Muestra final
+
+Una vez que todos los caracteres se hayan descifrado, se mostrará el mensaje:
 
     Hola Mundo
 
