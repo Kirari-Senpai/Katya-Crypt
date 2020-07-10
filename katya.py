@@ -47,10 +47,10 @@ SPECIAL_NUMBER = 91
 
 
 
-# Formula de descifrado Katya: [ [(91*Coc + (a^-1) * (Lc-sk2))%91] ^ [Lk*Lki] ] - Lk - Lki
+# Formula de descifrado Katya: [ [(91*C + (a^-1) * (Lc-sk2))%91] ^ [Lk*Lki] ] - Lk - Lki
 
-# Coc: cociente calculado 
-# a^-1: inversa del modulo calculado
+# C: cociente calculado 
+# a^-1: inverso multiplicativo (aritmetica modular)
 # Lc: letra cifrada
 # Lk: letra de la contraseña
 # Lki: letra de la contraseña (invertida)
@@ -149,7 +149,7 @@ class Katya:
 
 		return raw_passwd
 
-
+	# Se esta viendo por este metodo
 	def __shifts(self,generic_list,num):
 
 		"""
@@ -351,7 +351,7 @@ class Katya:
 
 		return matrix
 
-
+	# Se esta viendo por este metodo
 	def __modify_msg(self,raw_string,rotate):
 
 		"""
