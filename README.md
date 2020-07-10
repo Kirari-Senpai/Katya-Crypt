@@ -262,6 +262,13 @@ Salida:
 ¿bbh¡o¿bcg¡k¿bfa¡6¿bcf¡}¿bbd¡!¿bbd¡´¿bcf¡}¿bfb¡P¿bcg¡~¿bbh¡5
 ```
 
+Al momento de cifrar el mensaje, se generará el IV. Para poder verlo, solo escriba:
+
+```
+>>> katya.iv
+```
+
+
 ### Descifrado
 
 Para desencriptar el mensaje, usaremos el método decrypt:
