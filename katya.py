@@ -211,15 +211,9 @@ class Katya:
 
 		"""
 
-		subkeys_ = []
-
 		a,b = (1,SPECIAL_NUMBER)
 
-		for i in range(a,b+1):
-			if (coprime(i,b)==1):
-				subkeys_.append(i)
-
-		return subkeys_
+		return [i for i in range(a,b+1) if coprime(i,b)==1]
 
 
 	# FUNCIONES PARA EL LENGUAJE
