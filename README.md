@@ -156,7 +156,7 @@ ok6}!´}P~5
 14 10 58 88 62 71 88 41 89 57
 ```
 
-#### Aplicar regla a cada entero
+#### Proceso *Block Cipher Encryption* inverso
 
 Por cada entero la cadena se le aplica la siguiente regla:
 
@@ -166,7 +166,7 @@ Los variables y sus descripciones son:
 
 ```
    C: cociente calculado 
-   a^-1: inversa del modulo calculado
+   a⁻¹: inverso multiplicativo (aritmética modular)
    Lc: letra cifrada
    Lk: letra de la contraseña
    Lki: letra de la contraseña (invertida)
@@ -174,9 +174,37 @@ Los variables y sus descripciones son:
    
 ```
 
-En esta etapa también usaremos la misma variable llamada *resultado* como muestra. En principio:
+En esta etapa descifraremos el carácter que mostramos en el proceso de cifrado. En principio:
 
-**a)** Debemos calcular el inverso modular a partir del coprimo y desplazamiento seleccionado en la etapa de cifrado:
+**a)** Debemos calcular el  número que nos dio en el **paso c** del cifrado:
+
+![enter image description here](https://i.imgur.com/yPcowKA.png)
+
+ **b)** Luego al resultado se le sumará el producto entre el cociente calculado (**paso c de cifrado** -> resultado / 91) y el 91:
+
+![enter image description here](https://i.imgur.com/7OAYIoo.png)
+
+**c)** Se realiza la operación XOR entre el resultado y el producto entre el entero del carácter de la contraseña y la invertida:
+
+![enter image description here](https://i.imgur.com/VcwU0JV.png)
+
+**d)** Por último, se le resta al resultado el número del carácter de la contraseña y luego la de la invertida:
+
+![enter image description here](https://i.imgur.com/lRgLn9q.png)
+
+Al transformarlo a carácter, vemos que es la "H".
+
+**Nota:** aclaró de nuevo que acá utilizamos el mismo ejemplo que en la etapa de cifrado, con la diferencia que lo vamos a desencriptar. Esto es para mostrar el funcionamiento interno del mismo. 
+
+#### Aplicando nuevamente el CBC pero de manera inversa
+
+![enter image description here](https://upload.wikimedia.org/wikipedia/commons/6/66/Ecb_decryption.png)
+
+En caso que no entiendan esta parte, ya les he dejado un enlace el cual explica el proceso ;) 
+
+#### Muestra final
+
+    Hola Mundo
 
 ## Cómo descargar e instalar dependencias?
 
