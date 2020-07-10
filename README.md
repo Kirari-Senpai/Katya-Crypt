@@ -374,6 +374,14 @@ Los valores de la subclave 2 debe ser de 1 a 91.
 
 Si bien este último método no es muy seguro, se puede combinar con los métodos anteriores y así mejorar la seguridad. Eso suena bien eh? :o
 
-## Requerimientos
+## :heavy_exclamation_mark: Requerimientos
 
 Python 3.5 o superior
+
+## :octocat: Contribuciones
+
+Todas las contribuciones son bienvenidas! Código, documentación, tutoriales, etc., son bienvenidos. Lo que tenga que ofrecer, ¡lo agradecería! 
+
+## Advertencia 
+
+El mismo está en pleno desarrollo, por lo tanto, puede presentar errores durante su ejecución.
