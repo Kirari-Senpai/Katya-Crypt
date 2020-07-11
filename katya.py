@@ -51,8 +51,8 @@ IV_SIZE = 20
 
 # Formula de descifrado Katya: [ [(91*Coc + (a^-1) * (Lc-sk2))%91] ^ [Lk*Lki] ] - Lk - Lki
 
-# Coc: cociente calculado 
-# a^-1: inversa del modulo calculado
+# C: cociente calculado 
+# a^-1: inverso multiplicativo (aritmetica modular)
 # Lc: letra cifrada
 # Lk: letra de la contraseña
 # Lki: letra de la contraseña (invertida)
@@ -68,8 +68,6 @@ class Katya:
 		self.subkey1,self.subkey2 = (1,1)
 		self.iv = None
 
-
-	# METODOS OCULTOS
 
 	def __clear_string(self,string):
 
@@ -152,11 +150,12 @@ class Katya:
 		return raw_passwd
 
 
+	# METODO EN DESUSO (POR AHORA)
 	def __shifts(self,generic_list,num):
 
 		"""
 
-		Devuelve una lista con los trozos de mensaje alterados.
+		Devuelve una lista con los trozos de mensaje desplazado.
 
 		Parametros -> generic_list: lista a trozos de mensaje (ejemplo) ["Hola","Mundo!","Es","la","hora."]
 		              num: desplazamientos de los elementos de la lista (ejemplo) 3
@@ -213,15 +212,9 @@ class Katya:
 
 		"""
 
-		subkeys_ = []
-
 		a,b = (1,SPECIAL_NUMBER)
 
-		for i in range(a,b+1):
-			if (coprime(i,b)==1):
-				subkeys_.append(i)
-
-		return subkeys_
+		return [i for i in range(a,b+1) if coprime(i,b)==1]
 
 
 	# FUNCIONES PARA EL LENGUAJE
@@ -230,7 +223,7 @@ class Katya:
 
 		"""
 
-		Devuleve el abecedario que se utilizara para cifrar el mensaje.
+		Devuelve el abecedario que se utilizara para cifrar el mensaje.
 
 		Parametros -> abc: integer or list (por defecto 0)
 
@@ -333,14 +326,13 @@ class Katya:
 
 		"""
 
-		Devuelve una lista con trozos de mensaje con longitud contraseña.
+		Devuelve una lista con trozos de mensaje con longitud IV.
 
-		Parametros -> raw_string: string (ejemplo) Hola Mundo
-		              len_password: integer (ejemplo) 4
+		Parametros -> raw_string: string (ejemplo) Hola Mundo | Si IV_SIZE = 4
 
 		Salida: ["Hola"," Mun","do\0\0"]
 
-		Nota: si el ultimo elemento no tiene la misma longitud que la contraseña, 
+		Nota: si el ultimo elemento no tiene la misma longitud que el IV, 
 		      entonces se le agregaran caracteres nulos.
 
 		"""
@@ -356,11 +348,20 @@ class Katya:
 
 	def __blocks_quotients(self,quotients,long_quotiens,long_blocks):
 
+		"""
+
+		Devuelve lista de bloques. Cada bloque contiene los cocientes de un trozo de cadena longitud IV
+
+		Salida: [[1,4,6,1],[2,3,4,5],[5,5,1,2],[4,0,1,3]]
+
+		"""
+
 		long_ = long_quotiens//long_blocks
 
 		return [quotients[i:i+long_] for i in range(0, len(quotients), long_)]
 
 
+	# METODO EN DESUSO (POR AHORA)
 	def __modify_msg(self,raw_string,rotate):
 
 		"""
@@ -391,10 +392,16 @@ class Katya:
 	
 	def __KatyaEncypter(self,s_block,p_block):
 
+		"""
+
+		Devuelve bloque de cadena cifrado y proximo IV.
+
+		"""
+
 		# Asignar subclaves
 		sk1,sk2 = self.subkey1,self.subkey2
 
-		iv,enc = ("","")
+		iv,enc_string = ("","")
 
 		for i in range(len(s_block)):
 
@@ -405,19 +412,26 @@ class Katya:
 
 			chr_n = ( (calc%SPECIAL_NUMBER) * sk1 + sk2 ) % SPECIAL_NUMBER
 
-			enc += "¿"+quotient+"¡"+self.ABC[chr_n]
+			enc_string += "¿"+quotient+"¡"+self.ABC[chr_n]
 			iv += self.ABC[chr_n]
 
-		return (enc,iv)
+		return (enc_string,iv)
 
 
 	def __CBC_Encypt(self,raw_string,raw_password,iv):
 
-		cbc_result = []
+		"""
 
-		# Dividir cadena en crudo en trozos de longitud de clave
+		Devuelve resultado del cifrado CBC.
+
+		"""
+
+		cbc_result = ""
+
+		# Dividir cadena en crudo en trozos de longitud IV
+
 		s_blocks = self.__build_blocks(raw_string)
-		password = self.__password_complete(''.join(s_blocks),raw_password)
+		password = self.__password_complete(''.join(s_blocks),raw_password)	
 		p_blocks = self.__build_blocks(password)
 
 		for i in range(len(s_blocks)):
@@ -425,17 +439,22 @@ class Katya:
 			# Aplicar operador XOR con el bloque y el IV
 			block_xor = ''.join([chr(ord(a) ^ ord(b)) for a,b in zip(s_blocks[i],iv)])
 
-			# Bloque cifrado y proximo IV
+			# Aplicar cifrado Katya
 			block_cipher,iv = self.__KatyaEncypter(block_xor,p_blocks[i])
 
-			# Agregar el bloque cifrado a la lista
-			cbc_result.append(block_cipher)
+			cbc_result += block_cipher
 
 		return cbc_result
 
 
 
 	def __KatyaDecypter(self,s_block,p_block,subkey1,subkey2,quotients):
+
+		"""
+
+		Devuelve bloque de cadena descifrado. 
+
+		"""
 
 		raw_decrypt = ""
 		
@@ -458,32 +477,38 @@ class Katya:
 
 	def __CBC_Decrypt(self,raw_string,raw_password,password,sk1,sk2,quotients,iv):
 
+		"""
+
+		Devuelve resultado del descifrado CBC.
+
+		"""
+
 		s_blocks = self.__build_blocks(raw_string)
 		p_blocks = self.__build_blocks(password)
-		quotients = self.__blocks_quotients(quotients,len(quotients),len(s_blocks))
+		q_blocks = self.__blocks_quotients(quotients,len(quotients),len(s_blocks))
 
-		decrypt = []
+		cbc_result = ""
 
 		for i in range(len(s_blocks)):
 
-			block = []
+			block = ""
 			
-			block_decipher = self.__KatyaDecypter(s_blocks[i],p_blocks[i],sk1,sk2,quotients[i])
+			block_decipher = self.__KatyaDecypter(s_blocks[i],p_blocks[i],sk1,sk2,q_blocks[i])
 
 			for a,b in zip(block_decipher,iv):
 				ordinal_chr = ord(a) ^ ord(b)
 				# Si entero supero tal numero, significa que es un caracter invalido,
 				# por lo que se cambia por un caracter valido.
 				if (ordinal_chr<=55291): 
-					block.append(chr(ordinal_chr))
+					block += chr(ordinal_chr)
 				else:
-					block.append(chr(random.randint(33,255)))
+					block += chr(random.randint(33,255))
 
-			decrypt.append(''.join(block))
+			cbc_result += block
 
 			iv = s_blocks[i]
 
-		return decrypt
+		return cbc_result
 
 
 	def encrypt(self,raw_string,password,string_shift=0,iv=None):
@@ -494,15 +519,16 @@ class Katya:
 
 		Parametros -> raw_string: string (ejemplo) Hola Mundo
 		              password: string (ejemplo) password
-		              string_shift: integer (alteracion de cadena) (ejemplo) 3
+		              string_shift: integer (alteracion de cadena) (ejemplo) 3  --> en desuso temporalmente
+		              iv: string de longitud fija
 
 		Salida: ¿bcb¡T¿bcg¡e¿bce¡w¿bcc¡X¿bcf¡r¿bcf¡F¿bcc¡7¿bce¡B¿bcf¡q¿bcc¡6
 
 		"""
 		
-		# Modificar cadena
-		if (string_shift!=0):
-			raw_string = self.__modify_msg(raw_string,string_shift)
+		
+		#if (string_shift!=0):
+		#	raw_string = self.__modify_msg(raw_string,string_shift)
 
 
 		# password en crudo y completado con logitud cadena
@@ -514,6 +540,7 @@ class Katya:
 			self.iv = self.__generate_iv() if iv==None else iv
 			iv = self.iv
 
+			# Generar cifrado
 			result = self.__CBC_Encypt(raw_string,raw_password,iv)
 
 		else:
@@ -521,7 +548,7 @@ class Katya:
 			raise ABCException("ABC not established")
 
 
-		return ''.join(result)
+		return result
 
 
 	def decrypt(self,raw_string,password,iv,seed=0,string_shift=0,subkey1=1,subkey2=1):
@@ -551,13 +578,14 @@ class Katya:
 		raw_password = self.__check_password(raw_string,password)
 		password = self.__password_complete(string,raw_password)
 
+		
 		if (self.ABC!=None):
 
+			# Obtener resultado del cifrado
 			result = self.__CBC_Decrypt(string,raw_password,password,subkey1,subkey2,quotients,iv)
-			None
 
 		else:
 
 			raise ABCException("ABC not established")
 
-		return ''.join(result)
+		return result
