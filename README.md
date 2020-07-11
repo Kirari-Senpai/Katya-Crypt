@@ -388,7 +388,7 @@ Python 3.5 o superior
 
 ## :octocat: Contribuciones
 
-Todas las contribuciones son bienvenidas! Código, documentación, tutoriales, etc., son bienvenidos. Lo que tenga que ofrecer, ¡lo agradecería! 
+Todas las contribuciones (Código, documentación, tutoriales, etc.) son bienvenidas! Lo que tenga que ofrecer, ¡lo agradecería! 
 
 ## Advertencia 
 
