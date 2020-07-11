@@ -589,3 +589,34 @@ class Katya:
 			raise ABCException("ABC not established")
 
 		return result
+
+	# Metodos de formato
+	def elegant(self,result=None):
+
+		'''
+
+		Devuelve cadena con formato elegante.
+
+		'''
+
+		if (result!=None):
+
+			result_elegant = "---- BEGIN KATYA TEXT ENCRYPT ----\n\n"
+
+			cont = 0
+
+			for block in result:
+				if (cont<=60):
+					result_elegant += block
+					cont+=1
+				else:
+					result_elegant += '\n'
+					cont = 0
+
+			result_elegant += "\n\n---- END KATYA TEXT ENCRYPT ----\n"
+
+			return result_elegant
+
+		else:
+
+			raise KatyaException("There is no message to decorate")
