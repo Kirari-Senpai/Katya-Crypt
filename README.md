@@ -41,8 +41,8 @@ katyakatya
 Si no sabe que es el modo CBC, [haga click aquí](https://es.wikipedia.org/wiki/Modos_de_operaci%C3%B3n_de_una_unidad_de_cifrado_por_bloques).
 
 **Nota1:** la versión que se implementó en este cifrado es más simplificada y simple. <br>
- **Nota2:** el IV y los bloques deben ser de longitud contraseña.<br>
- **Nota3:** el IV por defecto es generado automáticamente, pero también lo puede establecer usted. Guardelo de manera segura, lo usará en el proceso de descifrado. 
+ **Nota2:** el IV y los bloques tienen una logitud fija. Mientras más larga la longitud del IV, más aumenta la propagación de errores.<br>
+ **Nota3:** el IV por defecto es generado automáticamente, pero también lo puede establecer usted. Guardelo de manera segura, lo usará en el proceso de descifrado.
 
 #### Proceso *Block Cipher Encryption*
 
