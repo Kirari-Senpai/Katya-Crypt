@@ -10,7 +10,10 @@
 import random
 import collections
 
+from os import remove
+from os.path import isfile
 from math import gcd as coprime
+from base64 import b64encode, b64decode
 from sympy.core.numbers import igcdex as inverse
 
 
@@ -33,6 +36,8 @@ class SubkeysError(KatyaException):
 
 
 SPECIAL_NUMBER = 91	
+
+BLOCK_SIZE = 20
 
 IV_SIZE = 20
 
@@ -326,22 +331,22 @@ class Katya:
 
 		"""
 
-		Devuelve una lista con trozos de mensaje con longitud IV.
+		Devuelve una lista con trozos de mensaje con longitud BLOCK_SIZE.
 
-		Parametros -> raw_string: string (ejemplo) Hola Mundo | Si IV_SIZE = 4
+		Parametros -> raw_string: string (ejemplo) Hola Mundo | Si BLOCK_SIZE = 4
 
 		Salida: ["Hola"," Mun","do\0\0"]
 
-		Nota: si el ultimo elemento no tiene la misma longitud que el IV, 
+		Nota: si el ultimo elemento no tiene la misma longitud que el BLOCK_SIZE, 
 		      entonces se le agregaran caracteres nulos.
 
 		"""
 
-		matrix = [raw_string[i:i+IV_SIZE] for i in range(0,len(raw_string),IV_SIZE)]
+		matrix = [raw_string[i:i+BLOCK_SIZE] for i in range(0,len(raw_string),BLOCK_SIZE)]
 
-		if (len(matrix[-1:][0])<IV_SIZE):
+		if (len(matrix[-1:][0])<BLOCK_SIZE):
 
-			matrix[len(matrix)-1] = matrix[-1:][0] + '\0'*(IV_SIZE - len(matrix[-1:][0]))
+			matrix[len(matrix)-1] = matrix[-1:][0] + '\0'*(BLOCK_SIZE - len(matrix[-1:][0]))
 
 		return matrix
 
@@ -352,7 +357,7 @@ class Katya:
 
 		Devuelve lista de bloques. Cada bloque contiene los cocientes de un trozo de cadena longitud IV
 
-		Salida: [[1,4,6,1],[2,3,4,5],[5,5,1,2],[4,0,1,3]]
+		Salida ejemplo: [[1,4,6,1],[2,3,4,5],[5,5,1,2],[4,0,1,3]]
 
 		"""
 
@@ -427,8 +432,6 @@ class Katya:
 		"""
 
 		cbc_result = ""
-
-		# Dividir cadena en crudo en trozos de longitud IV
 
 		s_blocks = self.__build_blocks(raw_string)
 		password = self.__password_complete(''.join(s_blocks),raw_password)	
@@ -548,6 +551,7 @@ class Katya:
 			raise ABCException("ABC not established")
 
 
+
 		return result
 
 
@@ -590,7 +594,87 @@ class Katya:
 
 		return result
 
+
+	# Todo relacionado a archivos
+
+	def __read_file(self,file_name):
+
+		with open(file_name,"rb") as f:
+
+			content = f.read()
+
+		return content
+
+	def __write_file(self,file_name,data):
+
+		with open(file_name,"wb") as f:
+
+			f.write(data) 
+
+
+	def file_encrypt(self,file_name,password):
+
+		try:
+
+			if (isfile(file_name)):
+
+				content = b64encode(self.__read_file(file_name))
+				
+				# Encriptar contenido 
+				data_enc = self.encrypt(content.decode(),password)
+
+				data_dump = data_enc.encode()+self.iv.encode()
+
+				self.__write_file(file_name+".katya",data_dump)
+				self.__write_file("katya.key",password.encode())
+
+				remove(file_name)
+
+			else:
+				print ("File does not exists")
+
+		except Exception as exception:
+
+			print ("An error occurred while encrypting the file: ",exception)
+
+
+	def file_decrypt(self,file_name,file_pass):
+
+		try:
+
+			if (isfile(file_name) and file_name.endswith(".katya") and isfile(file_pass) and file_pass.endswith(".key")):
+
+				original_name = file_name[:len(file_name)-6]
+
+				data_enc = self.__read_file(file_name).decode()
+				data_enc_ = data_enc[:len(data_enc)-IV_SIZE]
+				iv = data_enc[-20:]
+				password = (self.__read_file(file_pass).decode()).strip()
+
+				data_dec = b64decode(self.decrypt(data_enc_,password,iv))
+
+				self.__write_file(original_name,data_dec)
+
+				remove(file_name)
+				remove(file_pass)
+
+			else:
+
+				print ("File does not exists or the file does not have the extension (.katya,.key)")
+
+		except ValueError:
+
+			print ("The file could not be decrypted")
+
+		except (Exception,ValueError) as exception:
+
+			print ("An error occurred while decrypting the file: ",exception)
+
+		return
+
+
 	# Metodos de formato
+
 	def elegant(self,result=None):
 
 		'''
