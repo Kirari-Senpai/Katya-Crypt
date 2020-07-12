@@ -682,7 +682,7 @@ class Katya:
 			print ("An error occurred while encrypting the file: ",exception)
 
 
-	def file_decrypt(self,file_name,file_pass):
+	def file_decrypt(self,file_name,file_pass,seed=0,subkey1=1,subkey2=1):
 
 		try:
 
@@ -695,7 +695,7 @@ class Katya:
 				iv = data_enc[-20:]
 				password = (self.__read_file(file_pass).decode()).strip()
 
-				data_dec = b64decode(self.decrypt(data_enc_,password,iv))
+				data_dec = b64decode(self.decrypt(data_enc_,password,iv,seed,subkey1,subkey2))
 
 				self.__write_file(original_name,data_dec)
 
