@@ -200,13 +200,21 @@ class Katya:
 
 		"""
 
-		if (isinstance(a,int) and isinstance(b,int)) and ((a>0 and a<=SPECIAL_NUMBER) and (b>0 and b<=SPECIAL_NUMBER)) and (coprime(a,SPECIAL_NUMBER)==1):
-			self.subkey1,self.subkey2 = (a,b)
+		try:
 
-		else:
-			raise SubkeysError('Failed to set subkeys')
+			if (isinstance(a,int) and isinstance(b,int)) and ((a>0 and a<=SPECIAL_NUMBER) and (b>0 and b<=SPECIAL_NUMBER)) and (coprime(a,SPECIAL_NUMBER)==1):
+				self.subkey1,self.subkey2 = (a,b)
 
-		return (self.subkey1,self.subkey2)
+				return (self.subkey1,self.subkey2)
+			
+			else:
+				raise SubkeysError('Failed to set subkeys')
+
+		except SubkeysError as e:
+
+			print (e)
+
+		return False
 
 
 	def show_possible_subkeys(self):
@@ -241,24 +249,30 @@ class Katya:
 
 		"""
 
-		if (isinstance(abc,list)) and (len(abc)==SPECIAL_NUMBER) and (abc!=0) and (len(abc)==len(set(abc))):
+		try:
 
-			self.ABC = abc
+			if (isinstance(abc,list)) and (len(abc)==SPECIAL_NUMBER) and (abc!=0) and (len(abc)==len(set(abc))):
 
-		elif (abc==0):
+				self.ABC = abc
 
-			self.ABC = ["a","b","c","d","e","f","g","h","i","j","k","l","m","n","o","p","q","r","s","t","u","v","w","x","y","z",
-			            "A","B","C","D","E","F","G","H","I","J","K","L","M","N","O","P","Q","R","S","T","U","V","W","X","Y","Z",
-			            "0","1","2","3","4","5","6","7","8","9","!","#","$","%","&","(",")","*","+","´","-",".","/",
-			            ":",";","<","=",">","@","[","]","^","_","`","{","|","}","~","?"]
+			elif (abc==0):
 
+				self.ABC = ["a","b","c","d","e","f","g","h","i","j","k","l","m","n","o","p","q","r","s","t","u","v","w","x","y","z",
+				            "A","B","C","D","E","F","G","H","I","J","K","L","M","N","O","P","Q","R","S","T","U","V","W","X","Y","Z",
+				            "0","1","2","3","4","5","6","7","8","9","!","#","$","%","&","(",")","*","+","´","-",".","/",
+				            ":",";","<","=",">","@","[","]","^","_","`","{","|","}","~","?"]
 
-		else:
-			
-			raise ABCException("ABC Invalid")
+			else:
+				
+				raise ABCException("ABC Invalid")
 
-		return self.ABC
+			return self.ABC
 
+		except ABCException as e:
+
+			print (e)
+
+		return False
 
 	def random_ABC(self):
 
@@ -272,22 +286,29 @@ class Katya:
 		podra recuperar la informacion al momento de querer descifrarla.
 
 		"""
+		try:
 
-		if (self.ABC!=None):
+			if (self.ABC!=None):
 
-			self.set_ABC(0)
+				self.set_ABC(0)
 
-			num = random.randint(0,SPECIAL_NUMBER-1)
+				num = random.randint(0,SPECIAL_NUMBER-1)
 
-			random.Random(num).shuffle(self.ABC)
+				random.Random(num).shuffle(self.ABC)
 
-			self.seed_ = num
+				self.seed_ = num
 
-		else:
+				return self.seed_
 
-			raise ABCException("ABC not established")
+			else:
 
-		return self.seed_
+				raise ABCException("ABC not established")
+
+		except ABCException as e:
+
+			print (e)
+
+		return False
 
 
 	def set_seed(self,integer=0):
@@ -318,11 +339,17 @@ class Katya:
 
 				self.seed_ = integer
 
-		except SeedException:
+				return self.seed_
 
-			print ("An error occurred while setting seed")
+			else:
 
-		return self.seed_
+				raise SeedException("An error occurred while setting seed")
+
+		except SeedException as s:
+
+			print (s)
+
+		return False
 
 
 	# FUNCIONES PARA MODIFICAR MENSAJE
@@ -534,25 +561,31 @@ class Katya:
 		#	raw_string = self.__modify_msg(raw_string,string_shift)
 
 
-		# password en crudo y completado con logitud cadena
-		raw_password = self.__check_password(raw_string,password)
+		try:
 
-		if (self.ABC!=None):
+			# password en crudo y completado con logitud cadena
+			raw_password = self.__check_password(raw_string,password)
 
-			# Generar Vector de Inicializacion (IV)
-			self.iv = self.__generate_iv() if iv==None else iv
-			iv = self.iv
+			if (self.ABC!=None):
 
-			# Generar cifrado
-			result = self.__CBC_Encypt(raw_string,raw_password,iv)
+				# Generar Vector de Inicializacion (IV)
+				self.iv = self.__generate_iv() if iv==None else iv
+				iv = self.iv
 
-		else:
+				# Generar cifrado
+				result = self.__CBC_Encypt(raw_string,raw_password,iv)
 
-			raise ABCException("ABC not established")
+				return result
+			
+			else:
 
+				raise ABCException("ABC not established")
 
+		except Exception as exception:
 
-		return result
+			print (exception)
+
+		return False
 
 
 	def decrypt(self,raw_string,password,iv,seed=0,string_shift=0,subkey1=1,subkey2=1):
@@ -573,26 +606,35 @@ class Katya:
 
 		"""
 
-		# Ordenar ABC
-		self.set_seed(seed)
+		try:
 
-		# Obtener cadena modificada y cocientes
-		quotients,string = self.__clear_string(raw_string)
+				# Ordenar ABC
+				self.set_seed(seed)
 
-		raw_password = self.__check_password(raw_string,password)
-		password = self.__password_complete(string,raw_password)
+				# Obtener cadena modificada y cocientes
+				quotients,string = self.__clear_string(raw_string)
 
-		
-		if (self.ABC!=None):
+				raw_password = self.__check_password(raw_string,password)
+				password = self.__password_complete(string,raw_password)
 
-			# Obtener resultado del cifrado
-			result = self.__CBC_Decrypt(string,raw_password,password,subkey1,subkey2,quotients,iv)
+				
+				if (self.ABC!=None):
 
-		else:
+					# Obtener resultado del cifrado
+					result = self.__CBC_Decrypt(string,raw_password,password,subkey1,subkey2,quotients,iv)
 
-			raise ABCException("ABC not established")
+					return result
+				
+				else:
 
-		return result
+					raise ABCException("ABC not established")
+
+
+		except Exception as exception:
+
+			print(exception)
+
+		return False
 
 
 	# Todo relacionado a archivos
@@ -610,6 +652,8 @@ class Katya:
 		with open(file_name,"wb") as f:
 
 			f.write(data) 
+
+		return True
 
 
 	def file_encrypt(self,file_name,password):
@@ -683,24 +727,32 @@ class Katya:
 
 		'''
 
-		if (result!=None):
+		try:
 
-			result_elegant = "---- BEGIN KATYA TEXT ENCRYPT ----\n\n"
+			if (result!=None):
 
-			cont = 0
+				result_elegant = "---- BEGIN KATYA TEXT ENCRYPT ----\n\n"
 
-			for block in result:
-				if (cont<=60):
-					result_elegant += block
-					cont+=1
-				else:
-					result_elegant += '\n'
-					cont = 0
+				cont = 0
 
-			result_elegant += "\n\n---- END KATYA TEXT ENCRYPT ----\n"
+				for block in result:
+					if (cont<=60):
+						result_elegant += block
+						cont+=1
+					else:
+						result_elegant += '\n'
+						cont = 0
 
-			return result_elegant
+				result_elegant += "\n\n---- END KATYA TEXT ENCRYPT ----\n"
 
-		else:
+				return result_elegant
 
-			raise KatyaException("There is no message to decorate")
+			else:
+
+				raise KatyaException("There is no message to decorate")
+
+		except KatyaException as e:
+
+			print (e)
+
+		return False
