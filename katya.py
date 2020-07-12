@@ -8,10 +8,9 @@
 #                 Created by Kirari
 
 import random
-import binascii
 import collections
 
-from os import remove
+from os import remove as remove_file
 from os.path import isfile
 from math import gcd as coprime
 from base64 import b64encode, b64decode
@@ -642,7 +641,7 @@ class Katya:
 			self.__write_file(file_name+".katya",data_dump)
 			self.__write_file("katya.key",password.encode())
 
-			remove(file_name)
+			remove_file(file_name)
 
 		else:
 			
@@ -670,8 +669,8 @@ class Katya:
 
 			self.__write_file(original_name,data_dec)
 
-			remove(file_name)
-			remove(file_pass)
+			remove_file(file_name)
+			remove_file(file_pass)
 
 			return True
 
