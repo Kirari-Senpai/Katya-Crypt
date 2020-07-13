@@ -518,7 +518,7 @@ class Katya:
 		return cbc_result
 
 
-	def encrypt(self,raw_string,password,string_shift=0,iv=None):
+	def encrypt(self,raw_string,password,iv=None):
 
 		"""
 
@@ -558,7 +558,7 @@ class Katya:
 		return result
 
 
-	def decrypt(self,raw_string,password,iv,seed=0,string_shift=0,subkey1=1,subkey2=1):
+	def decrypt(self,raw_string,password,iv,seed=0,subkey1=1,subkey2=1):
 
 		"""
 
