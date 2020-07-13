@@ -1,4 +1,5 @@
 
+
 # Katya-Crypt
 
 Katya es un algoritmo de cifrado simétrico simple desarrollado en Python.
@@ -11,7 +12,7 @@ El funcionamiento de dicho algoritmo se puede explicar de una manera sencilla:
 
 En el transcurso de todo este proceso, utilizaremos la cadena y contraseña: 
 
-    Hola Mundo         # Cadena
+    Hola Mundo!         # Cadena
     katya              # Contraseña
 
 Esto con el fin de que se entienda mejor la explicación. Sin más que añadir, comencemos con el primer paso.
@@ -30,8 +31,8 @@ Este deberá contar con una longitud de 91 caracteres distintos (por defecto ya 
 #### Autocompletar la contraseña con longitud de cadena
 
 ```
-Hola Mundo
-katyakatya
+Hola Mundo!
+katyakatyak
 ```
 
 #### Aplicar modo de operación CBC
@@ -41,8 +42,8 @@ katyakatya
 Si no sabe que es el modo CBC, [haga click aquí](https://es.wikipedia.org/wiki/Modos_de_operaci%C3%B3n_de_una_unidad_de_cifrado_por_bloques).
 
 **Nota1:** la versión que se implementó en este cifrado es más simplificada y simple. <br>
- **Nota2:** el IV y los bloques tienen una logitud fija. Mientras más larga la longitud del IV, más aumenta la propagación de errores.<br>
- **Nota3:** el IV por defecto es generado automáticamente, pero también lo puede establecer usted. Guardelo de manera segura, lo usará en el proceso de descifrado.
+ **Nota2:** el IV y los bloques tienen una logitud fija.<br>
+ **Nota3:** el IV por defecto es generado automáticamente, pero también lo puede establecer usted. Guárdelo de manera segura, lo usará en el proceso de descifrado.
 
 #### Proceso *Block Cipher Encryption*
 
@@ -67,7 +68,7 @@ Bien. ¿Pero que quiere decir esta regla?
    
 Bueno, con el fin de hacer sencillas las cosas, usaremos una variable llamada *resultado* y enteros de los caracteres "H", "k" y "a", que corresponden a la cadena, contraseña y contraseña invertida:
 
->     Hola Mundo         # Cadena
+>     Hola Mundo!         # Cadena
 >     katya              # Contraseña
 
 **Nota:** la contraseña invertida seria así -> aytak (de ahí viene el carácter "a" seleccionado)  <br>
@@ -108,19 +109,19 @@ Y listo, ya tendríamos el primer carácter ya cifrado. Vieron que es bastante s
 Una vez que finaliza el proceso de *Block Cipher Encryption*, directamente cada entero se asocia con un elemento del abecedario. Ejemplo:
 
 ```
-14 10 58 88 62 71 88 41 89 57
+33 22 49 12 21 43 9 62 14 80 55 34 89 30 2 79 1 2 39 88
 ```
 
 Se transforma a:
 
 ```
-ok6}!´}P~5
+HwXmvRj!o@3I~Ec>bcN}
 ```
 
 Claro, además de esos caracteres, se añadirán extras, que son los cocientes calculados de cada carácter del **paso c de Block Cipher Encryption**. Estos nos sirven para luego poder descifrarlos. Entonces, agregando estos a la cadena, quedan así:
 
 ```
-¿bbh¡o¿bcg¡k¿bfa¡6¿bcf¡}¿bbd¡!¿bbd¡´¿bcf¡}¿bfb¡P¿bcg¡~¿bbh¡5
+¿bbh¡H¿bch¡w¿bfa¡X¿bch¡m¿bbh¡v¿bbd¡R¿bcg¡j¿bfa¡!¿bch¡o¿bbg¡@¿bd¡3¿bcg¡I¿bfa¡~¿bcg¡E¿bbh¡c¿bbg¡>¿bcg¡b¿bfb¡c¿bcf¡N¿bbg¡}
 ```
 
 ### Descifrado
@@ -133,19 +134,19 @@ Se establece el abecedario con el que que se cifraron los mensajes.
 
 Se toma la cadena cifrada en crudo: 
 
-> ¿bbh¡o¿bcg¡k¿bfa¡6¿bcf¡}¿bbd¡!¿bbd¡´¿bcf¡}¿bfb¡P¿bcg¡~¿bbh¡5
+> ¿bbh¡H¿bch¡w¿bfa¡X¿bch¡m¿bbh¡v¿bbd¡R¿bcg¡j¿bfa¡!¿bch¡o¿bbg¡@¿bd¡3¿bcg¡I¿bfa¡~¿bcg¡E¿bbh¡c¿bbg¡>¿bcg¡b¿bfb¡c¿bcf¡N¿bbg¡}
 
 Se divide el respectivo string. La primera parte con los cocientes de cada carácter y la segunda con la cadena cifrada original sin extras.
 ```
-(["bbh","bcg","bfa","bcf","bbd","bbd","bcf","bfb","bcg","bbh"], ok6}!´}P~5) -> Forma genérica
-([117, 126, 150, 125, 113, 113, 125, 151, 126, 117], ok6}!´}P~5)
+(["bbh", "bch", "bfa", "bch", "bbh", "bbd", "bcg", "bfa", "bch", "bbg", "bd", "bcg", "bfa", "bcg",  "bbh", "bbg", "bcg", "bfb", "bcf", "bbg"], HwXmvRj!o@3I~Ec>bcN}) -> Forma genérica
+([117, 127, 150, 127, 117, 113, 126, 150, 127, 116, 113, 126, 150, 126, 117, 116, 126, 151, 125, 116], HwXmvRj!o@3I~Ec>bcN})
 ```
 
 #### Autocomplementar el key con longitud de cadena
 
 ```
-ok6}!´}P~5
-katyakatya
+HwXmvRj!o@3I~Ec>bcN}
+katyakatyakatyakatya
 ```
 
 #### Se recorre la cadena cifrada
@@ -153,8 +154,8 @@ katyakatya
 Cada carácter se transformará a su respectivo entero perteneciente al ABC.
 
 ```
-ok6}!´}P~5
-14 10 58 88 62 71 88 41 89 57
+H w X m v R j ! o @ 3 I ~ E c > b c N }
+33 22 49 12 21 43 9 62 14 80 55 34 89 30 2 79 1 2 39 88
 ```
 
 #### Proceso *Block Cipher Encryption* inverso
@@ -253,19 +254,20 @@ Ahora que tenemos todo preparado, empezaremos con el proceso de cifrado.
 Para encriptar un mensaje, usaremos el método encrypt:
 
 ```
->>> msg = katya.encrypt("Hola Mundo","katya")
+>>> msg = katya.encrypt("Hola Mundo!","katya")
 ```
 
 Salida:
 
 ```
-¿bbh¡o¿bcg¡k¿bfa¡6¿bcf¡}¿bbd¡!¿bbd¡´¿bcf¡}¿bfb¡P¿bcg¡~¿bbh¡5
+¿bbh¡H¿bch¡w¿bfa¡X¿bch¡m¿bbh¡v¿bbd¡R¿bcg¡j¿bfa¡!¿bch¡o¿bbg¡@¿bd¡3¿bcg¡I¿bfa¡~¿bcg¡E¿bbh¡c¿bbg¡>¿bcg¡b¿bfb¡c¿bcf¡N¿bbg¡}
 ```
 
 Al momento de cifrar el mensaje, se generará el IV. Para poder verlo, solo escriba:
 
 ```
 >>> katya.iv
+'8fFnt_DYu[?XRdG59VrL'
 ```
 
 
@@ -274,13 +276,13 @@ Al momento de cifrar el mensaje, se generará el IV. Para poder verlo, solo escr
 Para desencriptar el mensaje, usaremos el método decrypt:
 
 ```
->>> msg = katya.decrypt("¿bbh¡o¿bcg¡k¿bfa¡6¿bcf¡}¿bbd¡!¿bbd¡´¿bcf¡}¿bfb¡P¿bcg¡~¿bbh¡5","katya",katya.iv)
+>>> msg = katya.decrypt("¿bbh¡H¿bch¡w¿bfa¡X¿bch¡m¿bbh¡v¿bbd¡R¿bcg¡j¿bfa¡!¿bch¡o¿bbg¡@¿bd¡3¿bcg¡I¿bfa¡~¿bcg¡E¿bbh¡c¿bbg¡>¿bcg¡b¿bfb¡c¿bcf¡N¿bbg¡}","katya",katya.iv)
 ```
 
 Salida:
 
 ```
-Hola Mundo
+Hola Mundo!
 ```
 
 ## Necesito más seguridad, es posible?
@@ -325,10 +327,10 @@ Lo mismo podemos hacer con el método set_seed(). A diferencia del anterior, est
 >>> katya.random_ABC()
 64
 >>> 
->>> msg = katya.encrypt("Hola Mundo","katya")
+>>> msg = katya.encrypt("Hola Mundo!","katya")
 >>> 
 >>> msg
-'¿TT%¡#¿Ty!¡Q¿T9L¡G¿TyY¡3¿TTY¡m¿TTY¡Q¿Ty!¡t¿T9T¡e¿Ty9¡.¿TT%¡s'
+'¿TTY¡r¿TyY¡E¿T9L¡G¿TyY¡q¿TTY¡h¿TT%¡&¿Ty!¡_¿T9L¡0¿TyY¡g¿TT!¡z¿TT%¡>¿Ty!¡P¿T9L¡p¿Ty!¡^¿TTY¡y¿TT!¡s¿Ty!¡T¿T9T¡y¿Ty9¡o¿TT!¡@'
 >>>
 ```
 Y en efecto, se puede apreciar que la cadena de cifrado no es la misma que mostramos en el ejemplo anterior. Ahora, a descifrar, le pasamos como argumento seed, el valor entero obtenido:
@@ -359,16 +361,16 @@ Con este método se puede establecer las dos subclaves de las que estábamos hab
 >>> katya.subkeys(80,10)
 (80,10)
 >>> 
->>> msg = katya.encrypt("Hola Mundo","katya")
+>>> msg = katya.encrypt("Hola Mundo!","katya")
 >>> 
 >>> msg
-'¿bbh¡X¿bcg¡c¿bfa¡u¿bcf¡2¿bbd¡(¿bbd¡7¿bcf¡2¿bfb¡z¿bcg¡R¿bbh¡F'
+'¿bbh¡w¿bch¡0¿bfa¡C¿bch¡´¿bbh¡#¿bbd¡d¿bcg¡n¿bfa¡(¿bch¡X¿bbg¡Z¿bbd¡1¿bcg¡l¿bfa¡R¿bcg¡3¿bbh¡?¿bbg¡!¿bcg¡k¿bfb¡?¿bcf¡V¿bbg¡2'
 >>>
 ```
 
 Vemos que el resultado de cifrado no es el mismo que este:
 
-> ¿bbh¡o¿bcg¡k¿bfa¡6¿bcf¡}¿bbd¡!¿bbd¡´¿bcf¡}¿bfb¡P¿bcg¡~¿bbh¡5
+> ¿bbh¡H¿bch¡w¿bfa¡X¿bch¡m¿bbh¡v¿bbd¡R¿bcg¡j¿bfa¡!¿bch¡o¿bbg¡@¿bd¡3¿bcg¡I¿bfa¡~¿bcg¡E¿bbh¡c¿bbg¡>¿bcg¡b¿bfb¡c¿bcf¡N¿bbg¡}
 
 Si no tiene idea que número coprimo utilizar, no se preocupe, no tiene que calcular nada, puede utilizar el método show_possible_subkeys():
 
@@ -380,7 +382,64 @@ Si no tiene idea que número coprimo utilizar, no se preocupe, no tiene que calc
 
 Los valores de la subclave 2 debe ser de 1 a 91.
 
+Para desencriptar, solo pasamos los argumentos de la siguiente manera:
+
+```
+>>> katya.decrypt(msg,"katya",katya.iv,subkey1=80,subkey2=10)
+```
+
+Y listo!
+
+```
+Hola Mundo
+```
+
 Si bien este último método no es muy seguro, se puede combinar con los métodos anteriores y así mejorar la seguridad. Eso suena bien eh? :o
+
+## Encriptar y desencriptar archivos
+
+Katya nos permite cifrar archivos de una manera muy sencilla.
+
+```
+>>> katya.file_encrypt("ruta_archivo","tu_password")
+```
+
+Al terminar el proceso, al archivo se le añadirá la extensión ***.katya*** y además se creará otro archivo con extensión ***.key*** donde se almacenará tu contraseña, a este último debes guardarlo en un lugar secreto.
+
+Para descifrar:
+
+```
+>>> katya.file_decrypt("ruta_archivo","ruta_archivo_key")
+```
+
+**Nota:** para file_decrypt() se pueden utilizar los mismos parámetros que el descifrado común.
+
+## Mostrar mensajes cifrados de manera elegante
+
+Realmente este método no es importante, es solo para mostrar en pantalla el mensaje cifrado de una forma más clara, nada del otro mundo :p El fin,  se usa de la siguiente manera:
+
+    >>> print(katya.elegant(msg))
+
+Salida:
+
+```
+---- BEGIN KATYA TEXT ENCRYPT ----
+
+¿bbh¡H¿bch¡w¿bfa¡X¿bch¡m¿bbh¡v¿bbd¡R¿bcg¡j¿bfa¡!¿bch¡o¿bbg¡@¿
+bd¡3¿bcf¡D¿bfa¡$¿bcg¡9¿bbd¡/¿bbg¡}¿bcg¡I¿bfb¡I¿bch¡e¿bbg¡*¿bb
+¡P¿bcg¡8¿bfa¡9¿bcg¡1¿bbd¡$¿bbg¡[¿bch¡B¿bfa¡?¿bch¡n¿bbd¡[¿bbh¡
+¿bcg¡E¿bfb¡d¿bcg¡Q¿bbg¡/¿bbh¡`¿bcg¡f¿bfb¡h¿bch¡B¿bbh¡i¿bbg¡*¿
+ch¡h¿bfa¡a¿bcf¡~¿bbh¡m¿bbh¡2¿bcg¡j¿bfb¡c¿bcg¡7¿bbd¡]¿bbd¡B¿bc
+¡?¿bfa¡[¿bcf¡K¿bbh¡T¿bbd¡C¿bch¡z¿bfa¡)¿bcg¡q¿bbd¡V¿bbh¡y¿bcg¡
+¿beh¡4¿bcg¡y¿bbd¡)¿bbh¡m¿bch¡n¿beh¡K¿bcf¡~¿bbh¡T¿bbh¡p¿bcg¡9¿
+fa¡+¿bcg¡Z¿bbh¡v¿bbg¡.¿bcf¡F¿bfa¡W¿bcf¡K¿bbh¡t
+
+---- END KATYA TEXT ENCRYPT ----
+```
+En este ejemplo, cifré el siguiente mensaje: 
+
+`Hola Mundo! Katya es un cifrado simétrico muy simple. Saludos a todos! :D`
+
 
 ## :heavy_exclamation_mark: Requerimientos
 
