@@ -208,7 +208,7 @@ En caso que no entiendan esta parte, ya les he dejado un enlace el cual explica 
 
 Una vez que todos los caracteres se hayan descifrado, se mostrará el mensaje:
 
-    Hola Mundo
+    Hola Mundo!
 
 ## Cómo descargar e instalar dependencias?
 
