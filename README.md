@@ -1,5 +1,4 @@
 
-
 # Katya-Crypt
 
 Katya es un algoritmo de cifrado simétrico simple desarrollado en Python.
@@ -28,14 +27,22 @@ Este deberá contar con una longitud de 91 caracteres distintos (por defecto ya 
 '=', '>', '@', '[', ']', '^', '_', '`', '{', '|', '}', '~', '?'
 ```
 
-#### Autocompletar la contraseña con longitud de cadena
-
-```
-Hola Mundo!
-katyakatyak
-```
-
 #### Aplicar modo de operación CBC
+
+##### Dividir cadena en bloques de longitud 20
+
+En este caso, como la cadena es corta, al no llegar a 20, entonces se rellena con caracteres nulos.
+```
+Hola Mundo!\x00\x00\x00\x00\x00\x00\x00\x00\x00
+```
+##### Completar contraseña con longitud 20
+
+```
+katyakatyakatyakatya
+```
+Esto no sirve para cuando lleguemos al *Block Cipher Encryption*, se pueda cifrar todo con la misma longitud.
+
+##### Proceso de operación CBC
 
 ![enter image description here](https://upload.wikimedia.org/wikipedia/commons/d/d3/Cbc_encryption.png)
 
