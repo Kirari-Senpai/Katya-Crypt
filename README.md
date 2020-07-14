@@ -207,7 +207,7 @@ Al transformarlo a carácter, vemos que es la "H".
 
 #### Aplicando nuevamente el CBC pero de manera inversa
 
-![enter image description here](https://upload.wikimedia.org/wikipedia/commons/6/66/Ecb_decryption.png)
+![enter image description here](https://upload.wikimedia.org/wikipedia/commons/6/66/Cbc_decryption.png)
 
 En caso que no entiendan esta parte, ya les he dejado un enlace el cual explica el proceso ;) 
 
