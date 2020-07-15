@@ -405,6 +405,8 @@ Si bien este último método no es muy seguro, se puede combinar con los método
 
 ## Encriptar y desencriptar archivos
 
+**Advertencia:** se recomienda utilizar el método reset_all() para reestablecer todos los valores (iv,subkeys,ABC) a su estado original para evitar conflictos al momento de cifrar los archivos. Esto es para que parezca que empieza de 0.
+
 Katya nos permite cifrar archivos de una manera muy sencilla.
 
 ```
