@@ -95,12 +95,12 @@ class Katya:
 
 		blocks = [tuple(i.split('¡')) for i in string.split("¿") if len(i)!=0]
 
+
 		for block in blocks:
 				
 			quotient = ""
 
 			for chunk in block[0]:
-
 				quotient += str(self.ABC.index(chunk))
 
 			quotients.append(int(quotient))	
@@ -471,7 +471,7 @@ class Katya:
 			n_letter = self.ABC.index(s_block[i])
 
 			# Calculo de descifrado
-			calc = ((SPECIAL_NUMBER*quotients[i] +((inverse(subkey1,SPECIAL_NUMBER)[0]*(n_letter-subkey2))%SPECIAL_NUMBER)) ^ (ord(p_block[i])*ord(p_block[::-1][i]))) - ord(p_block[i]) - ord(p_block[::-1][i])
+			calc = ((SPECIAL_NUMBER*quotients[i] + ((inverse(subkey1,SPECIAL_NUMBER)[0]*(n_letter-subkey2))%SPECIAL_NUMBER)) ^ (ord(p_block[i])*ord(p_block[::-1][i]))) - ord(p_block[i]) - ord(p_block[::-1][i])
 
 			try:
 				raw_decrypt += chr(calc)
@@ -678,6 +678,14 @@ class Katya:
 
 			raise FileException("File does not exists or the file does not have the extension (.katya,.key)")
 
+	# Método para resetear todos los valores
+	def reset_all(self):
+
+		self.set_ABC()
+		self.subkey1,self.subkey2 = (1,1)
+		self.iv = None
+
+		return True
 
 	# Metodos de formato
 
