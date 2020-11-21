@@ -1,7 +1,7 @@
 
 # Katya-Crypt
 
-![logo](https://i.imgur.com/NGrp3Qd.png)
+![logo](https://i.imgur.com/2a2EMhR.png)
 
 Katya es un algoritmo de cifrado simétrico simple desarrollado en Python.
 
