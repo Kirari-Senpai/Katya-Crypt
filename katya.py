@@ -506,7 +506,10 @@ class Katya:
 				ordinal_chr = ord(a) ^ ord(b)
 				# Si entero supero tal numero, significa que es un caracter invalido,
 				# por lo que se cambia por un caracter valido.
-				block += chr(ordinal_chr) if ordinal_chr<=55291 else chr(random.randint(33,255))
+				if (ordinal_chr<=55291): 
+					block += chr(ordinal_chr)
+				else:
+					block += chr(random.randint(33,255))
 
 			cbc_result += block
 
